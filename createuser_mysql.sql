@@ -1,0 +1,1 @@
+GRANT ALL PRIVILEGES ON vtigercrm600.* TO 'vtigercrm'@'localhost' IDENTIFIED BY 'AvzHricg4ejxA' WITH GRANT OPTION;
