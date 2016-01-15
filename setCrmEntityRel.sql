@@ -9,16 +9,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `setCrmEntityRel`(
 BEGIN 
 DECLARE totBoletosBs DOUBLE(25,2);
 DECLARE totBoletosDol DOUBLE(25,2);
-SET @mod1=_modulo;
-SET @mod2=_modulorel;
-SET @id1=_crmid;
-SET @id2=_crmidrel;
 IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
-	SET totBoletosBs	=(SELECT SUM(totalboletos) FROM vtiger_boletos WHERE currency="VEF" AND localizadorid=_crmidrel);	
-	SET totBoletosDol	=(SELECT SUM(totalboletos) FROM vtiger_boletos WHERE currency="USD" AND localizadorid=_crmidrel);	
+	IF (_crmid=0) THEN
+		SET _crmid=(SELECT registrodeventasid FROM vtiger_localizadores WHERE localizadoresid=_crmidrel);
+	END IF;
+	SET totBoletosBs	=(SELECT SUM(totalboletos) FROM vtiger_boletos WHERE currency="VEF" AND localizadorid=_crmidrel AND status<>'Anulado');	
+	SET totBoletosDol	=(SELECT SUM(totalboletos) FROM vtiger_boletos WHERE currency="USD" AND localizadorid=_crmidrel AND status<>'Anulado');	
+
 	UPDATE vtiger_registrodeventas 
 	SET totalventabs=totBoletosBs, totalventadolares=totBoletosDol, totalpendientebs=totBoletosBs, totalpendientedolares=totBoletosDol 
 	WHERE registrodeventasid = _crmid;
+
+	UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
 END IF;
 
 END |
