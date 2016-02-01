@@ -27,7 +27,7 @@ DECLARE lastLocalizadorID INT;
 
 		INSERT INTO vtiger_crmentityrel VALUES (_localizadorid, "Localizadores", _boletosid, "Boletos");
 
-		call setCrmEntity("Boletos", @_passenger, @_creationDate, @idcrm, @iduser);
+		call setCrmEntity("Boletos", CONCAT(@_passenger,'',_boleto_number), @_creationDate, @idcrm, @iduser);
 
 		IF bandera = 1 THEN
 			SET lastLocalizadorID = (SELECT localizadoresid FROM vtigercrm600.vtiger_localizadores WHERE localizador = _localizador);
