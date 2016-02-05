@@ -15,7 +15,7 @@ DECLARE _tipodevuelo VARCHAR (255);
 DECLARE _base decimal(25,2);
 DECLARE _montobase decimal(25,2);
 
-select b.tipodevuelo, b.monto_base, l.contactoid, l.sistemagds, c.accountid, a.account_type
+select b.tipodevuelo, b.monto_base, l.contactoid, l.gds, c.accountid, a.account_type
 INTO _tipodevuelo, _montobase, _contactoid, _sistemagds, _accountid, _account_type
 from vtiger_boletos as b inner join vtiger_localizadores as l on b.localizadorid=l.localizadoresid
 inner join vtiger_contactdetails as c on c.contactid=l.contactoid

@@ -10,7 +10,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `setVtigerLocalizadores`(
 	)
 BEGIN 
 set @salida = 0;
-	INSERT INTO vtiger_localizadores (localizadoresid,localizador,contactoid,sistemagds,paymentmethod,status) 
+	INSERT INTO vtiger_localizadores (localizadoresid,localizador,contactoid,gds,paymentmethod,status) 
 	VALUES (localizadoresid,localizador,contacto_id,sistemagds,paymentmethod,status);
 	IF ROW_COUNT()>0 THEN
 		call setVtigerLocalizadorescf(localizadoresid);
