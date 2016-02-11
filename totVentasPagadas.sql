@@ -1,7 +1,24 @@
+DROP TRIGGER IF EXISTS insert_pagos_update_venta;
+DELIMITER |
+CREATE TRIGGER insert_pagos_update_venta AFTER INSERT ON vtiger_registrodepagos
+FOR EACH ROW BEGIN 	
+	CALL totVentasPagadas(NEW.registrodeventasid);	
+END |
+DELIMITER ;
+
+DROP TRIGGER IF EXISTS update_pagos_update_venta;
+DELIMITER |
+CREATE TRIGGER update_pagos_update_venta AFTER UPDATE ON vtiger_registrodepagos
+FOR EACH ROW BEGIN 	
+	CALL totVentasPagadas(NEW.registrodeventasid);	
+END |
+DELIMITER ;
+
+
+
 DROP PROCEDURE IF EXISTS totVentasPagadas;
 DELIMITER |
 CREATE DEFINER=`root`@`localhost` PROCEDURE `totVentasPagadas`(
-	IN _pagoId INT,
 	IN _ventaId INT)
 BEGIN 
 DECLARE _cambio DOUBLE(25,2); 
