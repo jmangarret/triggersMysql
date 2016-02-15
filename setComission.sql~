@@ -1,6 +1,6 @@
 DROP PROCEDURE IF EXISTS setComission;
 DELIMITER |
-CREATE DEFINER=`root`@`localhost` PROCEDURE `setComission`(
+CREATE DEFINER=`root`@`localhost`Procedure `setComission`(
 IN tipodeformula VARCHAR(255),
 IN base decimal(25,2),
 IN _before INT,

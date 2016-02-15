@@ -19,8 +19,9 @@ IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 	UPDATE vtiger_registrodeventas 
 	SET totalventabs=totBoletosBs, totalventadolares=totBoletosDol, totalpendientebs=totBoletosBs, totalpendientedolares=totBoletosDol 
 	WHERE registrodeventasid = _crmid;
-
-	UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
+	IF ROW_COUNT()>0 THEN		
+		UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
+	END IF;	
 END IF;
 
 END |

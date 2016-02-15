@@ -5,8 +5,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `setVtigerBoletos`(
 	IN _boleto_number VARCHAR(128), 
 	IN _localizador VARCHAR(128),
 	IN _currency VARCHAR(128), 	
-	IN _fee decimal(25),
-	IN _amount decimal(25),
+	IN _fee double(8,2),	
+	IN _amount double(8,2),
 	IN _montobase double(8,2),
 	IN _localizadorid INT,
 	IN _fecha_emision date,
@@ -19,7 +19,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `setVtigerBoletos`(
 BEGIN
 DECLARE lastLocalizadorID INT;
 	
-	INSERT INTO vtiger_boletos (boletosid,boleto1,localizador,currency,fee,amount,localizadorid,monto_base,fecha_emision,passenger,itinerario,status,tipodevuelo) 
+	INSERT INTO vtiger_boletos (boletosid,boleto1,localizador,currency,fee_airline,amount,localizadorid,monto_base,fecha_emision,passenger,itinerario,status,tipodevuelo) 
 	VALUES (_boletosid,_boleto_number,_localizador,_currency,_fee,_amount,_localizadorid,_montobase,_fecha_emision,_passenger,_itinerario,_status,_tipodevuelo);
 	IF ROW_COUNT()>0 THEN	
 		INSERT INTO vtiger_boletoscf (boletosid) VALUES (_boletosid);

@@ -9,6 +9,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `setCrmEntity`(
 	)
 BEGIN 
 DECLARE TotReg INT;
+IF (iduser IS NULL) THEN
+	SET iduser=1;
+END IF;
 SET TotReg=(SELECT COUNT(*) FROM vtiger_crmentity WHERE crmid=idcrm AND setype=modulo);
 IF (TotReg>0) THEN
 	UPDATE vtiger_crmentity SET smcreatorid=iduser, smownerid=iduser, label=label WHERE crmid=idcrm and setype=modulo;	

@@ -6,5 +6,6 @@ montobase, coupon_status, passenger, sistemagds, emittedDate, creationDate, depa
 ticketNumber, airlineID, YN_tax, status_emission, nombre_asesora, ID_asesora, nombre_satelite, 
 ID_satelite, tipo_vuelo, itinerary)
 VALUES (NEW.pnrLocator, NEW.bookingCurrency, NEW.fareCommissionPercent, NEW.fareCommission, NEW.totalPrice, NEW.price, NEW.voidStatus,
-NEW.passenger, NEW.gdsName, NEW.itemDate, NEW.pnrCreationDate, NEW.departureDate, NEW.ticketNumber, NEW.airlineid, NEW.PriceVAT, NEW.emittedStatus, 
+NEW.passenger, NEW.gdsName, NEW.itemDate, NEW.pnrCreationDate, NEW.departureDate, NEW.ticketNumber, CONCAT(NEW.airlineid,'/',NEW.airlinedescription), NEW.PriceVAT, NEW.emittedStatus, 
 NEW.ticketingAgentname, NEW.ticketingAgentid, NEW.bookingAgentname, NEW.bookingAgentid, NEW.marketPlace, NEW.itinerary);
+
