@@ -10,7 +10,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `setVtigerLocalizadores`(
 	IN status VARCHAR(128)
 	)
 BEGIN 
-set @salida = 0;
+set @salida = 0;	
+	IF (paymentmethod="Cash") 	THEN	SET paymentmethod="Efectivo"; 	END IF;
+	IF (paymentmethod="CC") 	THEN	SET paymentmethod="Credito"; 	END IF;
+	
 	INSERT INTO vtiger_localizadores (localizadoresid,localizador,contactoid,gds,paymentmethod,airline,status) 
 	VALUES (localizadoresid,localizador,contacto_id,sistemagds,paymentmethod,aerolinea,status);
 	IF ROW_COUNT()>0 THEN

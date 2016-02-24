@@ -18,25 +18,25 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `setVtigerBoletos`(
 	)
 BEGIN
 DECLARE lastLocalizadorID INT;
-	
-	INSERT INTO vtiger_boletos (boletosid,boleto1,localizador,currency,fee_airline,amount,localizadorid,monto_base,fecha_emision,passenger,itinerario,status,tipodevuelo) 
-	VALUES (_boletosid,_boleto_number,_localizador,_currency,_fee,_amount,_localizadorid,_montobase,_fecha_emision,_passenger,_itinerario,_status,_tipodevuelo);
-	IF ROW_COUNT()>0 THEN	
-		INSERT INTO vtiger_boletoscf (boletosid) VALUES (_boletosid);
-		call getCrmId();
+	IF (_tipodevuelo="International") 	THEN	SET _tipodevuelo="Internacional"; 	END IF;
+	IF (_tipodevuelo="National") 		THEN	SET _tipodevuelo="Nacional"; 		END IF;
 
-		INSERT INTO vtiger_crmentityrel VALUES (_localizadorid, "Localizadores", _boletosid, "Boletos");
+	IF (_status="Anulado" OR _status="Cancelado") THEN
+		UPDATE vtiger_boletos SET status=_status WHERE boleto1=_boleto_number;
+	ELSE
+		INSERT INTO vtiger_boletos (boletosid,boleto1,localizador,currency,fee_airline,amount,localizadorid,monto_base,fecha_emision,passenger,itinerario,status,tipodevuelo) 
+		VALUES (_boletosid,_boleto_number,_localizador,_currency,_fee,_amount,_localizadorid,_montobase,_fecha_emision,_passenger,_itinerario,_status,_tipodevuelo);
+		IF ROW_COUNT()>0 THEN	
+			INSERT INTO vtiger_boletoscf (boletosid) VALUES (_boletosid);
+			call getCrmId();
 
-		call setCrmEntity("Boletos", CONCAT(@_passenger,'',_boleto_number), @_creationDate, @idcrm, @iduser);
+			INSERT INTO vtiger_crmentityrel VALUES (_localizadorid, "Localizadores", _boletosid, "Boletos");
 
-		IF bandera = 1 THEN
-			SET lastLocalizadorID = (SELECT localizadoresid FROM vtigercrm600.vtiger_localizadores WHERE localizador = _localizador);
-		ELSE
-			SET lastLocalizadorID = (SELECT max(localizadoresid) FROM vtigercrm600.vtiger_localizadores);
+			call setCrmEntity("Boletos", CONCAT(@_passenger,'',_boleto_number), @_creationDate, @idcrm, @iduser);
+
+			call setComission(_boletosid,0);
+
 		END IF;
-
-		call getTypeComision(lastLocalizadorID,0);
-
 	END IF;
 END |
 DELIMITER ;

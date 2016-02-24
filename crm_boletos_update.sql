@@ -1,25 +1,37 @@
 DROP TRIGGER IF EXISTS crm_boletos_update;
 DELIMITER |
-CREATE TRIGGER crm_boletos_update
-BEFORE UPDATE ON vtigercrm600.vtiger_boletos
+CREATE TRIGGER crm_boletos_update BEFORE UPDATE ON vtiger_boletos
 FOR EACH ROW BEGIN
-SET NEW.totalboletos=NEW.fee+NEW.amount;
-CALL getTypeComision(NEW.boletosid,1);
-IF NEW.status != "Procesado" THEN
-	SET NEW.comision_sat = @comision_sat;
-END IF;
+	IF (NEW.fee IS NULL) THEN
+		SET NEW.fee=0;
+	END IF;
+	SET NEW.totalboletos=NEW.fee+NEW.amount;
+	CALL setComission(NEW.boletosid,1);
+	IF NEW.status != "Procesado" THEN
+		SET NEW.comision_sat = @comision_sat;
+	END IF;
 END|
 DELIMITER ;
 
-DROP TRIGGER IF EXISTS crm_boletos_insert;
+DROP TRIGGER IF EXISTS crm_boletos_insert_before;
 DELIMITER |
-CREATE TRIGGER crm_boletos_insert BEFORE INSERT ON vtiger_boletos
-FOR EACH ROW BEGIN  
-	DECLARE totBoletos DOUBLE(25,2);
-	SET NEW.totalboletos=NEW.fee + NEW.amount;	
+CREATE TRIGGER crm_boletos_insert_before BEFORE INSERT ON vtiger_boletos
+FOR EACH ROW BEGIN  	
+	IF (NEW.fee IS NULL) THEN
+		SET NEW.fee=0;
+	END IF;
+	SET NEW.totalboletos=NEW.fee + NEW.amount;		
 END |
 DELIMITER ;
-
+/*
+DROP TRIGGER IF EXISTS crm_boletos_insert;
+DELIMITER |
+CREATE TRIGGER crm_boletos_insert AFTER INSERT ON vtiger_boletos
+FOR EACH ROW BEGIN  	
+	CALL setComission(NEW.boletosid,0);
+END |
+DELIMITER ;
+*/
 
 DROP TRIGGER IF EXISTS crm_boletos_update_after;
 DELIMITER |
