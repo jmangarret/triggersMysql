@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS `boletos` (
   `ticketNumber` varchar(255) DEFAULT NULL,
   `airlineID` varchar(16) DEFAULT NULL,
   `YN_tax` decimal(15,2) DEFAULT NULL,
+  `total_tax` decimal(15,2) DEFAULT NULL,
   `status_emission` varchar(32) DEFAULT NULL,
   `ID_asesora` varchar(255) DEFAULT NULL,
   `nombre_asesora` varchar(255) DEFAULT NULL,
