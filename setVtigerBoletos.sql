@@ -14,6 +14,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `setVtigerBoletos`(
 	IN _itinerario VARCHAR(255),
 	IN _status VARCHAR(50),
 	IN _tipodevuelo VARCHAR(255),
+	IN _YN_tax decimal(15,2),
+	IN _total_tax decimal(15,2),
 	IN bandera INT
 	)
 BEGIN
@@ -24,8 +26,8 @@ DECLARE lastLocalizadorID INT;
 	IF (_status="Anulado" OR _status="Cancelado") THEN
 		UPDATE vtiger_boletos SET status=_status WHERE boleto1=_boleto_number;
 	ELSE
-		INSERT INTO vtiger_boletos (boletosid,boleto1,localizador,currency,fee_airline,amount,localizadorid,monto_base,fecha_emision,passenger,itinerario,status,tipodevuelo) 
-		VALUES (_boletosid,_boleto_number,_localizador,_currency,_fee,_amount,_localizadorid,_montobase,_fecha_emision,_passenger,_itinerario,_status,_tipodevuelo);
+		INSERT INTO vtiger_boletos (boletosid,boleto1,localizador,currency,fee_airline,amount,localizadorid,monto_base,fecha_emision,passenger,itinerario,status,tipodevuelo,yn_tax,total_tax) 
+		VALUES (_boletosid,_boleto_number,_localizador,_currency,_fee,_amount,_localizadorid,_montobase,_fecha_emision,_passenger,_itinerario,_status,_tipodevuelo,_YN_tax,_total_tax);
 		IF ROW_COUNT()>0 THEN	
 			INSERT INTO vtiger_boletoscf (boletosid) VALUES (_boletosid);
 			call getCrmId();
