@@ -11,6 +11,6 @@ CREATE TRIGGER crm_firmas_insert AFTER INSERT ON vtiger_terminales
 FOR EACH ROW BEGIN  
 	DECLARE totFirmas INT;
 	SET totFirmas=(SELECT MAX(sortorderid) FROM vtiger_firma);
-	INSERT INTO vtiger_firma VALUES(NULL,NEW.firma,1,0,totFirmas+1);	
+	INSERT INTO vtiger_firma VALUES(NULL,NEW.firma,1,0,totFirmas+1,0);	
 END |
 DELIMITER ;

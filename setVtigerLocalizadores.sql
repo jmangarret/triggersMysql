@@ -3,7 +3,7 @@ DELIMITER |
 CREATE DEFINER=`root`@`localhost` PROCEDURE `setVtigerLocalizadores`(
 	IN localizadoresid INT, 
 	IN localizador VARCHAR(128), 
-	IN contacto_id VARCHAR(255),
+	IN contacto_id INT,
 	IN sistemagds VARCHAR(128), 	
 	IN paymentmethod VARCHAR(128),
 	IN aerolinea VARCHAR(128),
