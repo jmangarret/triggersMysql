@@ -42,9 +42,13 @@ SET @_el_montobase = find_montobase;
 call getCrmId();
 call getCrmUser(find_id_asesora);
 
-SELECT localizadoresid INTO id_localizador FROM vtiger_localizadores WHERE localizador = find_localizador;
+SELECT localizadoresid INTO id_localizador FROM vtiger_localizadores WHERE localizadores = find_localizador;
 
 IF id_localizador>0 THEN
+	/*VALIDAMOS LOC SI EL BOLETO VIENE ANULADO*/
+	IF find_status_anu="Anulado" THEN
+		UPDATE vtiger_localizadores SET procesado=0 WHERE localizadoresid=id_localizador;
+	END IF;
 
 	SET bandera = 1;
 	call setVtigerBoletos(@idcrm, find_ticketNumber, find_localizador, find_currency, find_fee,

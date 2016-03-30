@@ -23,8 +23,12 @@ DECLARE lastLocalizadorID INT;
 	IF (_tipodevuelo="International") 	THEN	SET _tipodevuelo="Internacional"; 	END IF;
 	IF (_tipodevuelo="National") 		THEN	SET _tipodevuelo="Nacional"; 		END IF;
 
+	IF (_status="" OR _status IS NULL) THEN
+		SET _status=(SELECT DISTINCT emittedStatus FROM ibiptest.ifm_pnrairsegment WHERE pnrLocator=_localizador);
+	END IF;	
+
 	IF (_status="Anulado" OR _status="Cancelado") THEN
-		UPDATE vtiger_boletos SET status=_status WHERE boleto1=_boleto_number;
+		UPDATE vtiger_boletos SET status=_status,localizador=_localizador,localizadorid=_localizadorid WHERE boleto1=_boleto_number;
 	ELSE
 		INSERT INTO vtiger_boletos (boletosid,boleto1,localizador,currency,fee_airline,amount,localizadorid,monto_base,fecha_emision,passenger,itinerario,status,tipodevuelo,yn_tax,total_tax) 
 		VALUES (_boletosid,_boleto_number,_localizador,_currency,_fee,_amount,_localizadorid,_montobase,_fecha_emision,_passenger,_itinerario,_status,_tipodevuelo,_YN_tax,_total_tax);

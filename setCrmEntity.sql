@@ -3,7 +3,7 @@ DELIMITER |
 CREATE DEFINER=`root`@`localhost` PROCEDURE `setCrmEntity`(
 	IN modulo VARCHAR(250), 
 	IN label VARCHAR(250), 
-	IN creado VARCHAR(250), 	
+	IN creado DATETIME, 	
 	IN idcrm INT,
 	IN iduser INT
 	)
