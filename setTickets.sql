@@ -42,7 +42,7 @@ SET @_el_montobase = find_montobase;
 call getCrmId();
 call getCrmUser(find_id_asesora);
 
-SELECT localizadoresid INTO id_localizador FROM vtiger_localizadores WHERE localizadores = find_localizador;
+SELECT localizadoresid INTO id_localizador FROM vtiger_localizadores WHERE localizador = find_localizador;
 
 IF id_localizador>0 THEN
 	/*VALIDAMOS LOC SI EL BOLETO VIENE ANULADO*/
