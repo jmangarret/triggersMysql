@@ -20,7 +20,6 @@ FOR EACH ROW BEGIN
 	SET _itemDate=		CONCAT(NEW.itemDate,' ',hora,':',minuto,':',segundo);
 	SET _creationDate=	CONCAT(NEW.pnrCreationDate,' ',hora,':',minuto,':',segundo);
 
-	CALL getPaymentMethod(NEW.pnrLocator);
 	INSERT INTO registro_boletos.boletos (id_xml,localizador, currency, fee_percentage, fee, total_amount,
 	montobase, coupon_status, passenger, sistemagds, emittedDate, creationDate, departureDate, 
 	ticketNumber, airlineID, YN_tax, total_tax, status_emission, nombre_asesora, ID_asesora, nombre_satelite, 

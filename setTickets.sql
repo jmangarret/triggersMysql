@@ -3,7 +3,7 @@ DELIMITER |
 CREATE DEFINER=`root`@`localhost` PROCEDURE `setTickets`(IN id_ticket INT)
 BEGIN 
 DECLARE find_passenger VARCHAR(255);
-DECLARE find_creationDate date;
+DECLARE find_creationDate DATETIME;
 DECLARE find_id_asesora VARCHAR(255);
 DECLARE find_id_satelite VARCHAR(255);
 DECLARE find_localizador VARCHAR(16);
@@ -16,7 +16,7 @@ DECLARE find_currency VARCHAR(8);
 DECLARE find_fee double(8,2);
 DECLARE find_total_amount double(8,2);
 DECLARE find_montobase double(8,2);
-DECLARE find_emittedDate date;
+DECLARE find_emittedDate DATETIME;
 DECLARE find_itinerario VARCHAR(255);
 DECLARE id_localizador INT;
 DECLARE find_tipo_vuelo VARCHAR(255);
@@ -35,6 +35,7 @@ find_sistemagds, find_emittedDate, find_creationDate, find_ticketNumber, find_st
 find_id_satelite, find_tipo_vuelo, find_paymentmethod, find_itinerario, find_aerolinea, find_YN_tax, find_total_tax, find_status_anu
 FROM registro_boletos.boletos WHERE id=id_ticket;
 SET @_localizador = find_localizador;
+/*SET @_creationDate = CAST(find_creationDate AS VARCHAR);*/
 SET @_creationDate = find_creationDate;
 SET @_passenger = find_passenger;
 SET @_el_montobase = find_montobase;

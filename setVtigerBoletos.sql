@@ -22,11 +22,11 @@ BEGIN
 DECLARE lastLocalizadorID INT;
 	IF (_tipodevuelo="International") 	THEN	SET _tipodevuelo="Internacional"; 	END IF;
 	IF (_tipodevuelo="National") 		THEN	SET _tipodevuelo="Nacional"; 		END IF;
-
+	/*
 	IF (_status="" OR _status IS NULL) THEN
 		SET _status=(SELECT DISTINCT emittedStatus FROM ibiptest.ifm_pnrairsegment WHERE pnrLocator=_localizador);
 	END IF;	
-
+	*/
 	IF (_status="Anulado" OR _status="Cancelado") THEN
 		UPDATE vtiger_boletos SET status=_status,localizador=_localizador,localizadorid=_localizadorid WHERE boleto1=_boleto_number;
 	ELSE
@@ -38,7 +38,7 @@ DECLARE lastLocalizadorID INT;
 
 			INSERT INTO vtiger_crmentityrel VALUES (_localizadorid, "Localizadores", _boletosid, "Boletos");
 
-			call setCrmEntity("Boletos", CONCAT(@_passenger,'',_boleto_number), @_creationDate, @idcrm, @iduser);
+			call setCrmEntity("Boletos", CONCAT(@_passenger,' ',_boleto_number), @_creationDate, @idcrm, @iduser);
 
 			call setComission(_boletosid,0);
 
