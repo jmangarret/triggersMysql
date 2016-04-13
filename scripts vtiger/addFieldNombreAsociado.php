@@ -11,15 +11,15 @@ $users=Vtiger_Module::getInstance('Terminales');
 $block = Vtiger_Block::getInstance('Información General',$users);
 
 $fieldInstance = new Vtiger_Field();
-$fieldInstance->name = 'contactoid'; //Usually matches column name
+$fieldInstance->name = 'usercontactoid'; //Usually matches column name
 $fieldInstance->table = 'vtiger_terminales';
-$fieldInstance->column = 'contactoid'; //Must be lower case
-$fieldInstance->label = 'Nombre asociado'; //Upper case preceeded by LBL_
+$fieldInstance->column = 'usercontactoid'; //Must be lower case
+$fieldInstance->label = 'Agente/Satélite Asociado'; //Upper case preceeded by LBL_
 $fieldInstance->columntype = 'INT'; //
 $fieldInstance->uitype = 10; //Campo check
 $fieldInstance->typeofdata = 'V~O'; //V=Varchar?, M=Mandatory, O=Optional
 $block->addField($fieldInstance);
-$fieldInstance->setRelatedModules(Array('Contacts'));
+$fieldInstance->setRelatedModules(Array('Contacts','Users'));
 
 
 $block->save($users);
