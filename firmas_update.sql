@@ -10,12 +10,16 @@ FOR EACH ROW BEGIN
     IF isnull(totFirmas) THEN
 		SET totFirmas=0;
     END IF;
-	INSERT INTO vtiger_firma VALUES(NULL,NEW.firma,1,0,totFirmas+1,0);
-
-	SET contactid = (NEW.usercontactoid);
-	SET firmacontact = (NEW.firma);
-
-	call validar_firmas(firmacontact, contactid);
+    
+    SET contactid = (NEW.usercontactoid);
+    SET firmacontact = (NEW.firma);
+    
+    IF isnull(contactid) THEN
+        INSERT INTO vtiger_firma VALUES(NULL,NEW.firma,1,0,totFirmas+1,0);
+	ELSE
+		INSERT INTO vtiger_firma VALUES(NULL,NEW.firma,1,0,totFirmas+1,1);
+        call validar_firmas(firmacontact, contactid);
+    END IF;
 END |
 DELIMITER ;
 
