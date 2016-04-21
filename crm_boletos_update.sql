@@ -2,9 +2,8 @@ DROP TRIGGER IF EXISTS crm_boletos_update;
 DELIMITER |
 CREATE TRIGGER crm_boletos_update BEFORE UPDATE ON vtiger_boletos
 FOR EACH ROW BEGIN
-	IF (NEW.fee IS NULL) THEN
-		SET NEW.fee=0;
-	END IF;
+	CALL getFeeBoleto(NEW.status,NEW.tipodevuelo,NEW.itinerario);
+	SET NEW.fee = @MONTO_FEE;
 	SET NEW.totalboletos=NEW.fee+NEW.amount;
 	CALL setComission(NEW.boletosid,1);
 	IF NEW.status != "Procesado" THEN
@@ -17,10 +16,9 @@ DROP TRIGGER IF EXISTS crm_boletos_insert_before;
 DELIMITER |
 CREATE TRIGGER crm_boletos_insert_before BEFORE INSERT ON vtiger_boletos
 FOR EACH ROW BEGIN  	
-	IF (NEW.fee IS NULL) THEN
-		SET NEW.fee=0;
-	END IF;
-	SET NEW.totalboletos=NEW.fee + NEW.amount;		
+	CALL getFeeBoleto(NEW.status,NEW.tipodevuelo,NEW.itinerario);
+	SET NEW.fee = @MONTO_FEE;
+	SET NEW.totalboletos=NEW.fee + NEW.amount;	
 END |
 DELIMITER ;
 /*
