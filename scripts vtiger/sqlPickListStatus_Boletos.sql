@@ -11,6 +11,5 @@ PRIMARY KEY ( `statusboletoid` )
 INSERT INTO `vtiger_statusboleto` VALUES (1,'Emitido', 1,0,1);
 INSERT INTO `vtiger_statusboleto` VALUES (2,'Reemitido', 1,0,1);
 INSERT INTO `vtiger_statusboleto` VALUES (3,'Anulado', 1,0,2);
-INSERT INTO `vtiger_statusboleto` VALUES (4,'Procesado', 1,0,2);
 
 UPDATE vtiger_field SET uitype=16,`fieldname` = 'statusboleto' WHERE tablename='vtiger_boletos' AND columnname='status';

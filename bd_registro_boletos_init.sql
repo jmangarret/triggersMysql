@@ -26,13 +26,14 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+/*
 DROP PROCEDURE IF EXISTS `ejemplo`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ejemplo`(IN id INT)
 BEGIN
 SELECT CONCAT(currency,' ',fee) as prueba 
 FROM boletos WHERE id=id;
 END$$
-
+*/
 DROP PROCEDURE IF EXISTS `setTickets`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `setTickets`(IN id_ticket INT)
 BEGIN 

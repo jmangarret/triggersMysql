@@ -1,4 +1,5 @@
 #Verificar antes de correl el SQL el cvid en la tabla cvcolumnlist
+#select * from vtiger_cvcolumnlist where columnname like '%boletos%'
 UPDATE  `vtiger_cvcolumnlist` SET `columnname` = 'vtiger_boletos:boleto1:boleto1:Boletos_NUM_BOLETO:V' WHERE `vtiger_cvcolumnlist`.`cvid` = 143 AND `vtiger_cvcolumnlist`.`columnindex` = 1; 
 UPDATE  `vtiger_cvcolumnlist` SET `columnname` = 'vtiger_boletos:localizadorid:localizadorid:Boletos_LBL_IDLOCALIZADOR:V' WHERE `vtiger_cvcolumnlist`.`cvid` = 143 AND `vtiger_cvcolumnlist`.`columnindex` = 2; 
 UPDATE  `vtiger_cvcolumnlist` SET `columnname` = 'vtiger_boletos:passenger:passenger:Boletos_LBL_PASSENGER:V' WHERE `vtiger_cvcolumnlist`.`cvid` = 143 AND `vtiger_cvcolumnlist`.`columnindex` = 4; 

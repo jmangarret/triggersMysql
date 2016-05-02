@@ -11,8 +11,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `setVtigerLocalizadores`(
 	)
 BEGIN 
 set @salida = 0;	
-	IF (paymentmethod="Cash") 	THEN	SET paymentmethod="Efectivo"; 	END IF;
-	IF (paymentmethod="CC") 	THEN	SET paymentmethod="Credito"; 	END IF;
+	IF (paymentmethod="Cash") 	THEN	SET paymentmethod="Efectivo"; 			END IF;
+	IF (paymentmethod="CC") 	THEN	SET paymentmethod="Credito"; 			END IF;
+	IF (paymentmethod="AX") 	THEN	SET paymentmethod="American Express"; 	END IF;
 	
 	INSERT INTO vtiger_localizadores (localizadoresid,localizador,contactoid,gds,paymentmethod,airline,status) 
 	VALUES (localizadoresid,localizador,contacto_id,sistemagds,paymentmethod,aerolinea,status);

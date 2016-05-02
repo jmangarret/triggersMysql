@@ -10,6 +10,7 @@ PRIMARY KEY ( `statuslocid` )
 
 INSERT INTO `vtiger_statusloc` VALUES (1,'Confirmado', 1,0,2);
 INSERT INTO `vtiger_statusloc` VALUES (2,'Emitido', 1,0,2);
+INSERT INTO `vtiger_statusloc` VALUES (3,'Anulado', 1,0,2);
 
 
 UPDATE vtiger_field SET uitype=16, fieldname='statusloc' WHERE tablename='vtiger_localizadores' AND columnname='status';
