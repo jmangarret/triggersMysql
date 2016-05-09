@@ -21,19 +21,16 @@ INTO _tipodevuelo, _montobase, _contactoid, _sistemagds, _accountid, _account_ty
 from vtiger_boletos as b inner join vtiger_localizadores as l on b.localizadorid=l.localizadoresid
 inner join vtiger_contactdetails as c on c.contactid=l.contactoid
 inner join vtiger_account as a on a.accountid=c.accountid
-where b.boletosid=_boletoid;
+where b.boletosid=_boletoid LIMIT 1;
 
 SELECT tiposdecomisionesid INTO _tipodecomisionid FROM vtiger_tiposdecomisiones
-WHERE gds = _sistemagds AND tipousuario = _account_type AND tipodevuelo = _tipodevuelo;
+WHERE gds = _sistemagds AND tipousuario = _account_type AND tipodevuelo = _tipodevuelo AND tipotransaccion='Abono' LIMIT 1;
 
 SELECT tipodeformula, base INTO _tipodeformula, _base FROM vtiger_comisionsatelites
-WHERE tipodecomisionid = _tipodecomisionid AND accountid = _accountid;
-
-#call setComission(_tipodeformula,_base,_before,_montobase);
+WHERE tipodecomisionid = _tipodecomisionid AND accountid = _accountid LIMIT 1;
 
 SET @tipodeformula=_tipodeformula;
-SET @base=_base;############
-#SET @before=_before;
+SET @base=_base;
 SET @montobase=_montobase;
 
 END |

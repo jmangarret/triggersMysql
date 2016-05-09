@@ -21,15 +21,6 @@ FOR EACH ROW BEGIN
 	SET NEW.totalboletos=NEW.fee + NEW.amount;	
 END |
 DELIMITER ;
-/*
-DROP TRIGGER IF EXISTS crm_boletos_insert;
-DELIMITER |
-CREATE TRIGGER crm_boletos_insert AFTER INSERT ON vtiger_boletos
-FOR EACH ROW BEGIN  	
-	CALL setComission(NEW.boletosid,0);
-END |
-DELIMITER ;
-*/
 
 DROP TRIGGER IF EXISTS crm_boletos_update_after;
 DELIMITER |

@@ -7,7 +7,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `setVtigerLocalizadores`(
 	IN sistemagds VARCHAR(128), 	
 	IN paymentmethod VARCHAR(128),
 	IN aerolinea VARCHAR(128),
-	IN status VARCHAR(128)
+	IN status VARCHAR(128),
+	IN ref VARCHAR(128)
 	)
 BEGIN 
 set @salida = 0;	
@@ -15,8 +16,8 @@ set @salida = 0;
 	IF (paymentmethod="CC") 	THEN	SET paymentmethod="Credito"; 			END IF;
 	IF (paymentmethod="AX") 	THEN	SET paymentmethod="American Express"; 	END IF;
 	
-	INSERT INTO vtiger_localizadores (localizadoresid,localizador,contactoid,gds,paymentmethod,airline,status) 
-	VALUES (localizadoresid,localizador,contacto_id,sistemagds,paymentmethod,aerolinea,status);
+	INSERT INTO vtiger_localizadores (localizadoresid,localizador,contactoid,gds,paymentmethod,airline,status,referencia) 
+	VALUES (localizadoresid,localizador,contacto_id,sistemagds,paymentmethod,aerolinea,status,ref);
 	IF ROW_COUNT()>0 THEN
 		call setVtigerLocalizadorescf(localizadoresid);
 		call setCrmEntity("Localizadores", @_localizador, @_creationDate, @idcrm, @iduser);

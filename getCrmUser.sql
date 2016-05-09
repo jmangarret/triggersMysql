@@ -4,15 +4,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getCrmUser`(
  IN ced VARCHAR(20)
  )
 BEGIN 
-SET @iduser=0;
+SET @iduser=1;
 IF ced<>'' THEN
- SET @iduser=(SELECT id FROM vtiger_users WHERE cedula =ced or agenteid like concat('%',ced,'%'));
-  
- IF isnull(@iduser) THEN
-
- SET @iduser = (SELECT usercontactoid FROM vtiger_terminales WHERE  firma LIKE CONCAT('%',ced,'%'));
-
+ SET @iduser = (SELECT usercontactoid FROM vtiger_terminales AS t INNER JOIN vtiger_users AS u ON t.usercontactoid=u.id  WHERE firma LIKE CONCAT('%',ced,'%') LIMIT 1);
+ 
+ IF ISNULL(@iduser) THEN
+ 	SET @iduser=1;
  END IF;
+ 
 END IF;
 END |
 DELIMITER ;

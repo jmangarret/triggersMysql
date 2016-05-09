@@ -11,7 +11,7 @@ DECLARE totBoletosBs DOUBLE(25,2);
 DECLARE totBoletosDol DOUBLE(25,2);
 IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 	IF (_crmid=0) THEN
-		SET _crmid=(SELECT registrodeventasid FROM vtiger_localizadores WHERE localizadoresid=_crmidrel);
+		SET _crmid=(SELECT registrodeventasid FROM vtiger_localizadores WHERE localizadoresid=_crmidrel LIMIT 1);
 	END IF;
 	SET totBoletosBs	=(SELECT SUM(totalboletos) FROM vtiger_boletos WHERE currency="VEF" AND localizadorid=_crmidrel AND status<>'Anulado');	
 	SET totBoletosDol	=(SELECT SUM(totalboletos) FROM vtiger_boletos WHERE currency="USD" AND localizadorid=_crmidrel AND status<>'Anulado');	
@@ -23,6 +23,5 @@ IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 		UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
 	END IF;	
 END IF;
-
 END |
 DELIMITER ;
