@@ -22,16 +22,23 @@ from vtiger_boletos as b inner join vtiger_localizadores as l on b.localizadorid
 inner join vtiger_contactdetails as c on c.contactid=l.contactoid
 inner join vtiger_account as a on a.accountid=c.accountid
 where b.boletosid=_boletoid LIMIT 1;
-
+/*CALCULAMOS COMISION A PAGAR AL SATELITE*/
 SELECT tiposdecomisionesid INTO _tipodecomisionid FROM vtiger_tiposdecomisiones
 WHERE gds = _sistemagds AND tipousuario = _account_type AND tipodevuelo = _tipodevuelo AND tipotransaccion='Abono' LIMIT 1;
-
 SELECT tipodeformula, base INTO _tipodeformula, _base FROM vtiger_comisionsatelites
 WHERE tipodecomisionid = _tipodecomisionid AND accountid = _accountid LIMIT 1;
-
 SET @tipodeformula=_tipodeformula;
 SET @base=_base;
 SET @montobase=_montobase;
+
+/*CALCULAMOS FEE A COBRAR AL SATELITE*/
+SELECT tiposdecomisionesid INTO _tipodecomisionid FROM vtiger_tiposdecomisiones
+WHERE gds = _sistemagds AND tipousuario = _account_type AND tipodevuelo = _tipodevuelo AND tipotransaccion='Cargo' LIMIT 1;
+SELECT tipodeformula, base INTO _tipodeformula, _base FROM vtiger_comisionsatelites
+WHERE tipodecomisionid = _tipodecomisionid AND accountid = _accountid LIMIT 1;
+SET @tipodeformula_fee=_tipodeformula;
+SET @base_fee=_base;
+SET @montobase_fee=_montobase;
 
 END |
 DELIMITER ;
