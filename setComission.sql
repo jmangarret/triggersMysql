@@ -27,8 +27,8 @@ SET max_sp_recursion_depth = 5;
 		SET @comision_sat = comision;
 		SET @fee_sat = fee_sat;
 	ELSE
-		UPDATE vtigercrm600.vtiger_boletos SET comision_sat = comision WHERE boletosid = find_id_boleto;
-		UPDATE vtigercrm600.vtiger_boletos SET fee_satelite = fee_sat WHERE boletosid = find_id_boleto;
+		UPDATE vtigercrm600.vtiger_boletos SET comision_sat = comision 	WHERE boletosid = find_id_boleto;
+		UPDATE vtigercrm600.vtiger_boletos SET fee_satelite = fee_sat 	WHERE boletosid = find_id_boleto;
 	END IF;
 END |
 DELIMITER ;

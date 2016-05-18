@@ -4,10 +4,11 @@ CREATE TRIGGER crm_boletos_update BEFORE UPDATE ON vtiger_boletos
 FOR EACH ROW BEGIN
 	CALL getFeeBoleto(NEW.status,NEW.tipodevuelo,NEW.itinerario);
 	SET NEW.fee = @MONTO_FEE;
-	SET NEW.totalboletos=NEW.fee+NEW.amount;
+	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;
 	CALL setComission(NEW.boletosid,1);
 	IF NEW.status != "Procesado" THEN
 		SET NEW.comision_sat = @comision_sat;
+		SET NEW.fee_satelite = @fee_sat;
 	END IF;
 END|
 DELIMITER ;
@@ -18,7 +19,7 @@ CREATE TRIGGER crm_boletos_insert_before BEFORE INSERT ON vtiger_boletos
 FOR EACH ROW BEGIN  	
 	CALL getFeeBoleto(NEW.status,NEW.tipodevuelo,NEW.itinerario);
 	SET NEW.fee = @MONTO_FEE;
-	SET NEW.totalboletos=NEW.fee + NEW.amount;	
+	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;	
 END |
 DELIMITER ;
 
