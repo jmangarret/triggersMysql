@@ -8,7 +8,8 @@ FOR EACH ROW BEGIN
 	DECLARE _itemDate 		VARCHAR(50);
 	DECLARE _creationDate	VARCHAR(50);
 	
-	CALL getStatusTicket(NEW.pnrLocator,NEW.ticketNumber,NEW.emittedStatus);
+	SET @emittedStatus="Emitido";
+	SET @nuevo_loc=NEW.pnrLocator;
 
 	SET _hora=EXTRACT(HOUR FROM NOW());
 	SET _minuto=EXTRACT(MINUTE FROM NOW());

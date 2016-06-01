@@ -8,7 +8,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getStatusTicket`(
 BEGIN
 	SET @emittedStatus=emitted_status;
 	IF (@emittedStatus IS NULL OR @emittedStatus='') THEN
-		SET @emittedStatus=(SELECT DISTINCT emittedStatus FROM ifm_pnrairsegment WHERE ticketNumber=ticket_number);
+		SET @emittedStatus=(SELECT DISTINCT emittedStatus FROM ifm_pnrairsegment WHERE ticketNumber=ticket_number LIMIT 1);
 	END IF;
 	
 	SET @nuevo_loc=nuevo_loc;
