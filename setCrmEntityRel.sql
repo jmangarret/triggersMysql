@@ -9,19 +9,37 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `setCrmEntityRel`(
 BEGIN 
 DECLARE totBoletosBs DOUBLE(25,2);
 DECLARE totBoletosDol DOUBLE(25,2);
+DECLARE totProductosBs DOUBLE(25,2);
+DECLARE totProductosDol DOUBLE(25,2);
+DECLARE totBs DOUBLE(25,2);
+DECLARE totDol DOUBLE(25,2);
+
 IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 	IF (_crmid=0) THEN
 		SET _crmid=(SELECT registrodeventasid FROM vtiger_localizadores WHERE localizadoresid=_crmidrel LIMIT 1);
 	END IF;
-	SET totBoletosBs	=(SELECT SUM(totalboletos) FROM vtiger_boletos WHERE currency="VEF" AND localizadorid=_crmidrel AND status<>'Anulado');	
-	SET totBoletosDol	=(SELECT SUM(totalboletos) FROM vtiger_boletos WHERE currency="USD" AND localizadorid=_crmidrel AND status<>'Anulado');	
+	SET totBoletosBs	=(SELECT SUM(totalloc) FROM vtiger_localizadores AS l INNER JOIN vtiger_boletos AS b ON l.localizadoresid = b.localizadorid WHERE b.currency = "VEF" AND l.registrodeventasid=_crmid);	
+	SET totBoletosDol	=(SELECT SUM(totalloc) FROM vtiger_localizadores AS l INNER JOIN vtiger_boletos AS b ON l.localizadoresid = b.localizadorid WHERE b.currency = "USD" AND l.registrodeventasid=_crmid);	
+	
+	SET totProductosBs	=(SELECT IF(ISNULL(SUM(amount)),0,SUM(amount)) AS totProdBs  FROM vtiger_ventadeproductos WHERE currency='VEF' AND registrodeventasid = _crmid);	
+	SET totProductosDol	=(SELECT IF(ISNULL(SUM(amount)),0,SUM(amount)) AS totProdDs  FROM vtiger_ventadeproductos WHERE currency='USD' AND registrodeventasid = _crmid);	
 
-	UPDATE vtiger_registrodeventas 
-	SET totalventabs=totBoletosBs, totalventadolares=totBoletosDol, totalpendientebs=totBoletosBs, totalpendientedolares=totBoletosDol 
-	WHERE registrodeventasid = _crmid;
+	SET totBs =totBoletosBs+totProductosBs;
+	SET totDol=totBoletosDol+totProductosDol;
+	
+
+	UPDATE 	vtiger_registrodeventas 
+	SET 	totalventabs			=totBs, 
+			totalventadolares		=totDol, 
+			totalpendientebs		=totBs, 
+			totalpendientedolares	=totDol 
+	WHERE 	registrodeventasid		= _crmid;
+
 	IF ROW_COUNT()>0 THEN		
 		UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
 	END IF;	
+
+	CALL totVentasPagadas(_crmid);	
 END IF;
 END |
 DELIMITER ;
