@@ -2,14 +2,14 @@ DROP PROCEDURE IF EXISTS getTypeComision;
 DELIMITER |
 CREATE DEFINER=`root`@`localhost`PROCEDURE `getTypeComision`(
 IN _boletoid INT,
-IN _tipodevuelo VARCHAR(100)
+IN _tipodevuelo VARCHAR(100),
+IN _status VARCHAR(100)
 )
 BEGIN
 DECLARE _contactoid INT;
 DECLARE _accountid INT;
 DECLARE _account_type VARCHAR(200);
 DECLARE _tipodeformula VARCHAR(128);
-DECLARE _status VARCHAR(128);
 DECLARE _tipodecomisionid INT;
 DECLARE _sistemagds VARCHAR (255);
 DECLARE _base decimal(25,2);
@@ -17,8 +17,8 @@ DECLARE _montobase decimal(25,2);
 
 SET max_sp_recursion_depth = 5; 
 
-select b.monto_base, l.contactoid, l.gds, c.accountid, a.account_type, b.status
-	INTO _montobase, _contactoid, _sistemagds, _accountid, _account_type, _status
+select b.monto_base, l.contactoid, l.gds, c.accountid, a.account_type
+	INTO _montobase, _contactoid, _sistemagds, _accountid, _account_type
 	from vtiger_boletos as b inner join vtiger_localizadores as l on b.localizadorid=l.localizadoresid
 	inner join vtiger_contactdetails as c on c.contactid=l.contactoid
 	inner join vtiger_account as a on a.accountid=c.accountid

@@ -3,6 +3,7 @@ DELIMITER |
 CREATE DEFINER=`root`@`localhost` PROCEDURE `setComission`(
 IN find_id_boleto INT,
 IN _tipodevuelo VARCHAR(100),
+IN _status VARCHAR(100),
 IN _before INT
 )
 BEGIN
@@ -10,7 +11,7 @@ DECLARE comision decimal(25,2);
 DECLARE fee_sat decimal(25,2);
 SET max_sp_recursion_depth = 5; 
 
-	CALL getTypeComision(find_id_boleto,_tipodevuelo);
+	CALL getTypeComision(find_id_boleto,_tipodevuelo,_status);
 	/*CALCULAMOS COMISION A PAGAR SATELITE*/
 	IF @tipodeformula = "Porcentaje" THEN
 		SET comision = @base * @montobase/100;

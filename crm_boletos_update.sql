@@ -9,13 +9,13 @@ FOR EACH ROW BEGIN
 	END IF;
 	SET NEW.fee = @MONTO_FEE;
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;
-	
-	IF NEW.status = "Emitido" THEN
-		CALL setComission(NEW.boletosid,NEW.tipodevuelo,1);
-		SET NEW.comision_sat 	= @comision_sat;
-		SET NEW.fee_satelite 	= @fee_sat;
-		SET NEW.fee 			= @fee_sat;
+	/*CALCULAMOS FEE Y COMISION DE SATELITE*/
+	CALL setComission(NEW.boletosid,NEW.tipodevuelo,NEW.status,1);
+	SET NEW.comision_sat = @comision_sat;
+	IF @fee_sat>0 THEN
+		SET NEW.fee		= @fee_sat;
 	END IF;
+	
 END|
 DELIMITER ;
 
@@ -30,12 +30,13 @@ FOR EACH ROW BEGIN
 	END IF;	
 	SET NEW.fee = @MONTO_FEE;
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;	
-	IF NEW.status = "Emitido" THEN
-		CALL setComission(NEW.boletosid,NEW.tipodevuelo,1);
-		SET NEW.comision_sat 	= @comision_sat;
-		SET NEW.fee_satelite 	= @fee_sat;
-		SET NEW.fee 			= @fee_sat;
+	/*CALCULAMOS FEE Y COMISION DE SATELITE*/
+	CALL setComission(NEW.boletosid,NEW.tipodevuelo,NEW.status,1);
+	SET NEW.comision_sat = @comision_sat;
+	IF @fee_sat>0 THEN
+		SET NEW.fee		= @fee_sat;
 	END IF;
+
 END |
 DELIMITER ;
 
