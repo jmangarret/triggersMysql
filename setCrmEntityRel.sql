@@ -18,8 +18,8 @@ IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 	IF (_crmid=0) THEN
 		SET _crmid=(SELECT registrodeventasid FROM vtiger_localizadores WHERE localizadoresid=_crmidrel LIMIT 1);
 	END IF;
-	SET totBoletosBs	=(SELECT SUM(totalloc) FROM vtiger_localizadores AS l INNER JOIN vtiger_boletos AS b ON l.localizadoresid = b.localizadorid WHERE b.currency = "VEF" AND l.registrodeventasid=_crmid);	
-	SET totBoletosDol	=(SELECT SUM(totalloc) FROM vtiger_localizadores AS l INNER JOIN vtiger_boletos AS b ON l.localizadoresid = b.localizadorid WHERE b.currency = "USD" AND l.registrodeventasid=_crmid);	
+	SET totBoletosBs	=(SELECT SUM(totalboletos) FROM vtiger_localizadores AS l INNER JOIN vtiger_boletos AS b ON l.localizadoresid = b.localizadorid WHERE b.currency = "VEF" AND l.registrodeventasid=_crmid);	
+	SET totBoletosDol	=(SELECT SUM(totalboletos) FROM vtiger_localizadores AS l INNER JOIN vtiger_boletos AS b ON l.localizadoresid = b.localizadorid WHERE b.currency = "USD" AND l.registrodeventasid=_crmid);	
 	
 	SET totProductosBs	=(SELECT IF(ISNULL(SUM(amount)),0,SUM(amount)) AS totProdBs  FROM vtiger_ventadeproductos WHERE currency='VEF' AND registrodeventasid = _crmid);	
 	SET totProductosDol	=(SELECT IF(ISNULL(SUM(amount)),0,SUM(amount)) AS totProdDs  FROM vtiger_ventadeproductos WHERE currency='USD' AND registrodeventasid = _crmid);	

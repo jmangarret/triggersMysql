@@ -2,6 +2,7 @@ DROP PROCEDURE IF EXISTS setComission;
 DELIMITER |
 CREATE DEFINER=`root`@`localhost` PROCEDURE `setComission`(
 IN find_id_boleto INT,
+IN _tipodevuelo VARCHAR(100),
 IN _before INT
 )
 BEGIN
@@ -9,7 +10,7 @@ DECLARE comision decimal(25,2);
 DECLARE fee_sat decimal(25,2);
 SET max_sp_recursion_depth = 5; 
 
-	CALL getTypeComision(find_id_boleto);
+	CALL getTypeComision(find_id_boleto,_tipodevuelo);
 	/*CALCULAMOS COMISION A PAGAR SATELITE*/
 	IF @tipodeformula = "Porcentaje" THEN
 		SET comision = @base * @montobase/100;
@@ -28,7 +29,7 @@ SET max_sp_recursion_depth = 5;
 		SET @fee_sat = fee_sat;
 	ELSE
 		UPDATE vtigercrm600.vtiger_boletos SET comision_sat = comision 	WHERE boletosid = find_id_boleto;
-		UPDATE vtigercrm600.vtiger_boletos SET fee_satelite = fee_sat 	WHERE boletosid = find_id_boleto;
+		UPDATE vtigercrm600.vtiger_boletos SET fee_satelite = fee_sat, fee = fee_sat 	WHERE boletosid = find_id_boleto;
 	END IF;
 END |
 DELIMITER ;

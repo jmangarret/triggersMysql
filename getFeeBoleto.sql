@@ -1,55 +1,70 @@
 DROP PROCEDURE IF EXISTS getFeeBoleto;
 DELIMITER |
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getFeeBoleto`(
+	IN _locid INT(11), 
 	IN _status VARCHAR(50), 
 	IN _tipodevuelo VARCHAR(50), 
 	IN _itinerario VARCHAR(250)
 	)
 BEGIN 
-DECLARE MONTO_FEE DOUBLE(8,2) DEFAULT 0;
-SET sql_safe_updates=0;
+	DECLARE MONTO_FEE DOUBLE(8,2) DEFAULT 0;
+	DECLARE CLIENTE VARCHAR(100);
+	SET sql_safe_updates=0;
+
+	SET CLIENTE=(SELECT acc.account_type
+		FROM vtiger_account AS acc 
+		INNER JOIN vtiger_contactdetails 	AS con ON acc.accountid=con.accountid 
+		INNER JOIN vtiger_localizadores 	AS loc ON loc.contactoid=con.contactid 
+		WHERE loc.localizadoresid=_locid);
+	/*FEE DE AGENCIA A COBRAR POR EMISION CLIENTE FINAL*/
+	/*CUANDO ES SATELITE SE COBRA POR EL MODULO DE TIPO DE COMISIONES SATELITES TIPO CARGOS*/ 
 	IF (_status = 'Emitido') THEN
 		IF (_tipodevuelo = 'Nacional') THEN
 			IF (length(_itinerario) > 7) THEN
-				SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%EMI_NAC_IDV%');
+				SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%EMI_NAC_IDV%');
 			ELSE
-				SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%EMI_NAC_IDA%');
+				SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%EMI_NAC_IDA%');
 			END IF;
 		ELSE
-			SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%EMI_INT%');
+			SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%EMI_INT%');
 		END IF;
-	ELSEIF (_status = 'Reemitido') THEN
-		IF (_tipodevuelo = 'Nacional') THEN
-			/*IF (cliente = publico general) THEN*/
-				SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo  LIKE	'%REE_NAC_PGE%');
-			/*ELSE
-				SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%REE_NAC_SAT%');
-			END IF;
-		ELSEIF (NEW.tipodevuelo = 'Internacional') THEN
-			IF (cliente = publico general) THEN
-				SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%REE_INT_PGE%');*/
-			ELSE
-				/*SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%REE_INT_SAT%');*/
-				SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%REE_INT_PGE%'); /*Si existe tipo de cliente se elimina esta linea y se deja la de arriba*/
-		END IF;
-	ELSEIF (_status = 'Reembolsos') THEN
-		/*IF (cliente = publico general) THEN*/
-			SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%REM_INT_PGE%');
-		/*ELSE
-			SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%REM_INT_SAT%');
-		END IF;*/
-	ELSEIF (_status = 'Anulado') THEN
-		IF (_tipodevuelo = 'Nacional') THEN
-			SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%ANU_NAC%');
-		ELSE
-			SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%ANU_INT_PGE%');
-		END IF;
-	ELSEIF (_status = 'Seguro') THEN
-		SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%ASI_PAS%');
-	ELSE
-		SET MONTO_FEE=(select valor_base from vtiger_tarifas where codigo LIKE '%SEL_BOL%');
 	END IF;
-    /*END IF;*/
+	/*FEE DE AGENCIA A COBRAR POR RE-EMISION*/ 
+	IF (_status = 'Reemitido') THEN
+		IF (_tipodevuelo = 'Nacional') THEN
+			SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo  LIKE	'%REE_NAC_PGE%');
+			IF (CLIENTE ='Satelite') THEN
+				SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%REE_NAC_SAT%');
+			END IF;
+		ELSEIF (_tipodevuelo = 'Internacional') THEN
+			SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%REE_INT_PGE%');
+			IF (CLIENTE = 'Satelite') THEN
+				SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%REE_INT_SAT%');
+			END IF;				
+		END IF;
+	END IF;
+	/*FEE DE AGENCIA A COBRAR POR RE-EMBOLSOS*/ 
+	IF (_status = 'Reembolsos') THEN
+		SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%REM_INT_PGE%');
+		IF (CLIENTE ='Satelite') THEN
+			SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%REM_INT_SAT%');
+		END IF;
+	END IF;
+	/*FEE DE AGENCIA A COBRAR POR ANULACIONES*/ 
+	IF (_status = 'Anulado') THEN
+		IF (_tipodevuelo = 'Nacional') THEN
+			SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_NAC%');
+			IF (CLIENTE ='Satelite') THEN
+				SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_SAT%');
+			END IF;
+		ELSE
+			SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_INT_PGE%');
+			IF (CLIENTE ='Satelite') THEN
+				SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_SAT%');
+			END IF;
+		END IF;
+	END IF;
+
     SET @MONTO_FEE= MONTO_FEE;
 END |
 DELIMITER ;
