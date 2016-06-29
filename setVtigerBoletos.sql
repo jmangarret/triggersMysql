@@ -29,7 +29,8 @@ DECLARE validarBoleto INT;
 		SET validarBoleto=(SELECT boletosid FROM vtiger_boletos WHERE boleto1=_boleto_number LIMIT 1);
 		/*SI EL NUMERO DE BOLETO EXISTE PUEDE SER UNA REEMISION. SE ACTUALIZA EL LOCALIZADOR Y STATUS */
 		IF (validarBoleto>0 AND _status="Emitido") THEN
-			UPDATE vtiger_boletos SET status="Reemitido",localizador=_localizador,localizadorid=_localizadorid WHERE boleto1=_boleto_number;
+			/*UPDATE vtiger_boletos SET status="Reemitido",localizador=_localizador,localizadorid=_localizadorid WHERE boleto1=_boleto_number;*/
+			UPDATE vtiger_boletos SET localizador=_localizador,localizadorid=_localizadorid WHERE boleto1=_boleto_number;
 		ELSE
 			INSERT INTO vtiger_boletos (boletosid,boleto1,localizador,currency,fee_airline,amount,localizadorid,monto_base,fecha_emision,passenger,itinerario,status,tipodevuelo,yn_tax,total_tax) 
 			VALUES (_boletosid,_boleto_number,_localizador,_currency,_fee,_amount,_localizadorid,_montobase,_fecha_emision,_passenger,_itinerario,_status,_tipodevuelo,_YN_tax,_total_tax);
@@ -38,7 +39,7 @@ DECLARE validarBoleto INT;
 				CALL getCrmId();
 				INSERT INTO vtiger_crmentityrel VALUES (_localizadorid, "Localizadores", _boletosid, "Boletos");
 				CALL setCrmEntity("Boletos", CONCAT(@_passenger,' ',_boleto_number), @_creationDate, @idcrm, @iduser);
-				CALL setComission(_boletosid,0);
+				CALL setComission(_boletosid,_tipodevuelo,_status,0);				
 			END IF;
 		END IF;
 		

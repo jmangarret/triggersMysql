@@ -3,10 +3,7 @@ DELIMITER |
 CREATE TRIGGER crm_boletos_update BEFORE UPDATE ON vtiger_boletos
 FOR EACH ROW BEGIN	
 	SET @MONTO_FEE=0;
-	CALL valFeeBoleto(NEW.localizadorid);
-	IF (@feeBoleto>0) THEN
-		CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario);
-	END IF;
+	CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario);
 	SET NEW.fee = @MONTO_FEE;
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;
 	/*CALCULAMOS FEE Y COMISION DE SATELITE*/
@@ -24,10 +21,7 @@ DELIMITER |
 CREATE TRIGGER crm_boletos_insert_before BEFORE INSERT ON vtiger_boletos
 FOR EACH ROW BEGIN  
 	SET @MONTO_FEE=0;
-	CALL valFeeBoleto(NEW.localizadorid);
-	IF (@feeBoleto>0) THEN
-		CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario);
-	END IF;	
+	CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario);
 	SET NEW.fee = @MONTO_FEE;
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;	
 	/*CALCULAMOS FEE Y COMISION DE SATELITE*/
