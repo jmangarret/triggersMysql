@@ -39,7 +39,7 @@ DELIMITER |
 CREATE TRIGGER crm_boletos_update_after AFTER UPDATE ON vtiger_boletos
 FOR EACH ROW BEGIN 	
 	DECLARE _totalloc DOUBLE(25,2);
-	SET _totalloc=(SELECT SUM(totalboletos) FROM vtiger_boletos WHERE localizadorid=NEW.localizadorid);
+	SET _totalloc=(SELECT SUM(totalboletos) FROM vtiger_boletos AS b WHERE localizadorid=NEW.localizadorid AND b.boletosid NOT IN (SELECT crmid FROM vtiger_crmentity WHERE deleted=1));
 	UPDATE vtiger_localizadores SET totalloc=_totalloc WHERE localizadoresid=NEW.localizadorid;
 	CALL setCrmEntityRel("RegistroDeVentas","Localizadores",0,NEW.localizadorid);	
 END |
@@ -49,8 +49,8 @@ DROP TRIGGER IF EXISTS crm_boletos_insert_after;
 DELIMITER |
 CREATE TRIGGER crm_boletos_insert_after AFTER INSERT ON vtiger_boletos
 FOR EACH ROW BEGIN 	
-	DECLARE _totalloc DOUBLE(25,2);
-	SET _totalloc=(SELECT SUM(totalboletos) FROM vtiger_boletos WHERE localizadorid=NEW.localizadorid);
+	DECLARE _totalloc DOUBLE(25,2);	
+	SET _totalloc=(SELECT SUM(totalboletos) FROM vtiger_boletos AS b WHERE localizadorid=NEW.localizadorid AND b.boletosid NOT IN (SELECT crmid FROM vtiger_crmentity WHERE deleted=1));
 	UPDATE vtiger_localizadores SET totalloc=_totalloc WHERE localizadoresid=NEW.localizadorid;
 	CALL setCrmEntityRel("RegistroDeVentas","Localizadores",0,NEW.localizadorid);	
 END |
