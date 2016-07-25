@@ -13,6 +13,14 @@ DECLARE totProductosBs DOUBLE(25,2);
 DECLARE totProductosDol DOUBLE(25,2);
 DECLARE totBs DOUBLE(25,2);
 DECLARE totDol DOUBLE(25,2);
+DECLARE numRows INT DEFAULT 0; 
+
+IF (_modulo="Localizadores" AND _modulorel="Boletos") THEN
+	SET numRows=(SELECT COUNT(*) FROM vtiger_crmentityrel WHERE crmid=_crmid AND module= _modulo AND relcrmid=_crmidrel AND relmodule=_modulorel);
+	IF (numRows=0) THEN
+		INSERT INTO vtiger_crmentityrel VALUES (_crmid, "Localizadores", _crmidrel, "Boletos");
+	END IF;
+END IF;
 
 IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 	IF (_crmid=0) THEN
@@ -40,5 +48,7 @@ IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 
 	CALL totVentasPagadas(_crmid);	
 END IF;
+
+
 END |
 DELIMITER ;
