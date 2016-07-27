@@ -1,0 +1,2 @@
+ mysqldump -u root -proot vtigercrm600 | mysql -u root -proot vtigercrm601
+ mysqldump -u root -pip15x0 vtigercrm600 | mysql -u root -pip15x0 vtigercrm601
