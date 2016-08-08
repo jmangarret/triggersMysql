@@ -44,6 +44,16 @@ IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 
 	IF ROW_COUNT()>0 THEN		
 		UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
+		IF ROW_COUNT()>0 THEN	
+			/*VERIFICAMOS SI ES GDS SERVI PARA ACTUALIZAR STATUS DE VENTA SOTO*/
+			SET numRows=(SELECT COUNT(*) FROM vtiger_localizadores WHERE localizadoresid=_crmidrel AND gds='Servi');
+			IF (numRows>0) THEN
+				UPDATE 	vtiger_registrodeventas 
+				SET 	statussoto='Reservado'
+				WHERE 	registrodeventasid=_crmid AND (statussoto='' OR statussoto IS NULL);
+			END IF;
+			/*FIN STATUS SOTO*/
+		END IF;	
 	END IF;	
 
 	CALL totVentasPagadas(_crmid);	
