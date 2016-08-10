@@ -14,5 +14,5 @@ INSERT INTO `vtiger_statussoto` VALUES (3,'Emitir Soto', 1,0,2);
 INSERT INTO `vtiger_statussoto` VALUES (4,'Emitido', 1,0,2);
 
 
-UPDATE `vtiger_field` SET `fieldlabel` = 'Nro. Pasaporte', `typeofdata` = 'V~M' WHERE `vtiger_field`.`columnname` ='cf_663';
+UPDATE `vtiger_field` SET `fieldlabel` = 'Nro. Pasaporte', `typeofdata` = 'V~M', `quickcreate` = '2'  WHERE `vtiger_field`.`columnname` ='cf_663';
 UPDATE `vtiger_field` SET `displaytype` = '2' WHERE `vtiger_field`.`columnname` ='isSatelite';
