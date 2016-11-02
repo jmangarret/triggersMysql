@@ -22,6 +22,7 @@ DECLARE id_localizador INT;
 DECLARE find_tipo_vuelo VARCHAR(255);
 DECLARE find_aerolinea VARCHAR(255);
 DECLARE contacto_id VARCHAR(255);
+DECLARE loc VARCHAR(255);
 DECLARE bandera INT;
 DECLARE find_YN_tax decimal(15,2);
 DECLARE find_total_tax decimal(15,2);
@@ -43,13 +44,16 @@ SET @_el_montobase = find_montobase;
 
 CALL getCrmId();
 CALL getCrmUser(find_id_asesora);
+/*BUSCAMOS SI ESTA EMITIDO QUITANDO EL IDENTIFICADOR DE STATUS*/
+/*SET loc=SUBSTRING_INDEX(find_localizador, '(', 1);*/
+/*SELECT localizadoresid INTO id_localizador FROM vtiger_localizadores WHERE localizador = loc LIMIT 1;*/
 
 SELECT localizadoresid INTO id_localizador FROM vtiger_localizadores WHERE localizador = find_localizador LIMIT 1;
 
 IF id_localizador>0 THEN
 	/*VALIDAMOS LOC SI EL BOLETO VIENE ANULADO*/
-	IF find_status_anu="Anulado" THEN
-		UPDATE vtiger_localizadores SET procesado=0 WHERE localizadoresid=id_localizador;
+	IF find_status_anu="Anulado" THEN		
+		UPDATE vtiger_localizadores SET procesado=0,localizador=find_localizador WHERE localizadoresid=id_localizador;
 	END IF;
 
 	SET bandera = 1;
@@ -59,6 +63,7 @@ IF id_localizador>0 THEN
 	
 ELSE	
 	SELECT usercontactoid INTO contacto_id FROM vtiger_terminales AS t INNER JOIN vtiger_contactdetails AS d ON t.usercontactoid=d.contactid WHERE firma LIKE CONCAT('%',find_id_satelite,'%') LIMIT 1;
+	
 	CALL setVtigerLocalizadores(@idcrm, find_localizador, contacto_id, find_sistemagds, 
 	find_paymentmethod, find_aerolinea, find_status, find_id_satelite);
 
