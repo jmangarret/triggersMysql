@@ -14,8 +14,6 @@ FOR EACH ROW BEGIN
 END |
 DELIMITER ;
 
-
-
 DROP PROCEDURE IF EXISTS totVentasPagadas;
 DELIMITER |
 CREATE DEFINER=`root`@`localhost` PROCEDURE `totVentasPagadas`(
@@ -31,7 +29,7 @@ DECLARE _totPendBs DOUBLE(25,2);
 DECLARE _totPendDol DOUBLE(25,2);
 DECLARE _totDolEnBs DOUBLE(25,2);
 SELECT cf_881 , cf_1621 INTO _cambio, _status FROM vtiger_registrodeventascf WHERE registrodeventasid = _ventaId;
-IF (ISNULL(_cambio)) THEN 
+IF (ISNULL(_cambio) OR !_cambio OR _cambio=0) THEN 
 	SET _cambio=1;
 END IF;
 
