@@ -23,7 +23,7 @@ BEGIN
 	/*Validamos la firma de la Pagina Web, para no calcular fee de Agencia */
 	SET _valEmisionWeb=(SELECT localizadoresid FROM vtiger_localizadores WHERE localizadoresid=_loc AND referencia='0001AASU');
 	
-	IF (_valFreelance>0 OR _valEmisionWeb>0) THEN
+	IF (_valEmisionWeb>0) THEN
 		SET @feeBoleto=0;
 	END IF;
 	

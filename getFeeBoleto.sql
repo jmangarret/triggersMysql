@@ -9,12 +9,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getFeeBoleto`(
 BEGIN 
 	DECLARE MONTO_FEE DOUBLE(8,2) DEFAULT 0;
 	DECLARE CLIENTE VARCHAR(100);
+	DECLARE AEROLINEA VARCHAR(100);
 	SET sql_safe_updates=0;
 	SET CLIENTE=(SELECT acc.account_type
 		FROM vtiger_account AS acc 
 		INNER JOIN vtiger_contactdetails 	AS con ON acc.accountid=con.accountid 
 		INNER JOIN vtiger_localizadores 	AS loc ON loc.contactoid=con.contactid 
 		WHERE loc.localizadoresid=_locid);
+	SET AEROLINEA=(SELECT airline FROM vtiger_localizadores WHERE localizadoresid=_locid);
 	CALL valFeeBoleto(_locid);
 	IF (@feeBoleto>0) THEN	
 		/*FEE DE AGENCIA A COBRAR POR EMISION CLIENTE FINAL*/
@@ -57,6 +59,14 @@ BEGIN
 				SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_NAC%');
 				IF (CLIENTE ='Satelite') THEN
 					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_SAT%');
+				END IF;
+				/*AEROLINEAS DEL BSP 9V-AVIOR R7-ASERCA S3-SANTABARBARA QL-LASER AG-ARUBA AIRLINES*/
+				IF (AEROLINEA LIKE '9V%' OR AEROLINEA LIKE 'R7%' OR AEROLINEA LIKE 'S3%' OR AEROLINEA LIKE 'QL%' OR AEROLINEA LIKE 'AG%') THEN
+					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_BSP_PGE%');
+				END IF;
+				/*AEROLINEA AW-VENEZOLANA AIRLINES*/
+				IF (AEROLINEA LIKE 'AW%') THEN
+					SET MONTO_FEE=2240;
 				END IF;
 			ELSE
 				SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_INT_PGE%');
