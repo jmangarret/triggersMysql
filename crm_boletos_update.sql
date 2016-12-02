@@ -11,6 +11,7 @@ FOR EACH ROW BEGIN
 	IF @fee_sat>0 THEN
 		SET NEW.fee		= @fee_sat;
 	END IF;
+	SET NEW.extra_fee=IF(ISNULL(NEW.extra_fee),0,NEW.extra_fee);
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;
 END|
 DELIMITER ;
@@ -28,6 +29,7 @@ FOR EACH ROW BEGIN
 	IF @fee_sat>0 THEN
 		SET NEW.fee		= @fee_sat;
 	END IF;
+	SET NEW.extra_fee=IF(ISNULL(NEW.extra_fee),0,NEW.extra_fee);
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;	
 END |
 DELIMITER ;
