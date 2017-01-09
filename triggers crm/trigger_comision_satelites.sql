@@ -26,7 +26,7 @@ BEGIN
 		IF @end_row THEN
 			LEAVE loop1;
 		END IF;
-		IF (_type="Satelite") THEN			
+		IF (_type="Satelite" OR _type="Freelance") THEN			
 			SELECT COUNT(*) INTO _existe FROM vtiger_comisionsatelites WHERE accountid=_idsatelite AND tipodecomisionid=_tipodecomisionid;
 			IF (_existe>0) THEN
 				UPDATE vtiger_comisionsatelites SET tipodeformula=_tipodeformula,  base=_base WHERE accountid=_idsatelite AND tipodecomisionid=_tipodecomisionid;
