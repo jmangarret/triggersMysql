@@ -11,6 +11,9 @@ FOR EACH ROW BEGIN
 	IF @fee_sat>0 THEN
 		SET NEW.fee		= @fee_sat;
 	END IF;
+	IF NEW.status='Anulado' THEN
+		SET NEW.amount=0;
+	END IF;
 	SET NEW.extra_fee=IF(ISNULL(NEW.extra_fee),0,NEW.extra_fee);
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;
 END|
@@ -28,6 +31,9 @@ FOR EACH ROW BEGIN
 	SET NEW.comision_sat = @comision_sat;
 	IF @fee_sat>0 THEN
 		SET NEW.fee		= @fee_sat;
+	END IF;
+	IF NEW.status='Anulado' THEN
+		SET NEW.amount=0;
 	END IF;
 	SET NEW.extra_fee=IF(ISNULL(NEW.extra_fee),0,NEW.extra_fee);
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;	
