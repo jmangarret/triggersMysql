@@ -28,6 +28,7 @@ DECLARE _totPagosBs DOUBLE(25,2);
 DECLARE _totPendBs DOUBLE(25,2);
 DECLARE _totPendDol DOUBLE(25,2);
 DECLARE _totDolEnBs DOUBLE(25,2);
+DECLARE _totCambioBs DOUBLE(25,2);
 SELECT cf_881 , cf_1621 INTO _cambio, _status FROM vtiger_registrodeventascf WHERE registrodeventasid = _ventaId;
 IF (ISNULL(_cambio) OR !_cambio OR _cambio=0) THEN 
 	SET _cambio=1;
@@ -43,16 +44,26 @@ SET _totPagosDol=(SELECT IF(ISNULL(SUM(amount)),0,SUM(amount)) AS pagoDolares FR
 SET _totPagosBs	=(SELECT IF(ISNULL(SUM(amount)),0,SUM(amount)) AS PagoBs FROM vtiger_registrodepagos WHERE currency="VEF" AND registrodeventasid =_ventaId);
 
 SET _totPendBs = _totVentaBs - _totPagosBs;
-SET _totPendDol = _totVentaDol - _totPagosDol;
-
-IF (_totPagosBs>_totVentaBs AND _totPendDol>=0 AND (_totVentaBs>0 OR _totVentaDol>0)) THEN
-	SET _totDolEnBs = (_totPagosBs - _totVentaBs) / _cambio;
-	SET _totPendDol = _totVentaDol - _totPagosDol - _totDolEnBs;
-	SET _totPendBs = _totPendDol * _cambio;
-
+IF (_totPagosDol>0) THEN
+	SET _totPendDol = _totVentaDol - _totPagosDol;
+ELSE
+	SET _totPendDol	= 0;
 END IF;
 
-UPDATE vtiger_registrodeventas SET totalpagadobs=_totPagosBs, totalpagadodolares= _totPagosDol, totalpendientebs=_totPendBs, totalpendientedolares=_totPendDol 
+SET _totCambioBs = _totVentaDol * _cambio;
+
+SET _totPendBs = _totVentaBs + _totCambioBs - (_totPagosBs + _totPagosDol * _cambio);
+/*
+IF (_totPagosBs>_totVentaBs AND _totPendDol>=0 AND (_totVentaBs>0 OR _totVentaDol>0)) THEN
+	/*SET _totDolEnBs = (_totPagosBs - _totVentaBs) / _cambio;
+	SET _totPendDol = _totVentaDol - _totPagosDol - _totDolEnBs;
+	SET _totPendDol = _totVentaDol - _totPagosDol;
+	SET _totPendBs = _totPendDol * _cambio;			
+	SET _totPendBs = _totVentaBs + _totCambioBs - (_totPagosBs + _totPagosDol * _cambio);
+END IF;
+*/
+UPDATE vtiger_registrodeventas 
+SET totalpagadobs=_totPagosBs, totalpagadodolares= _totPagosDol, totalpendientebs=_totPendBs, totalpendientedolares=_totPendDol, totalcambiobs=_totCambioBs 
 WHERE registrodeventasid =_ventaId;
 
 IF (_status<>"Procesada") THEN
