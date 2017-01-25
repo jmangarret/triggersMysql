@@ -25,7 +25,7 @@ select b.monto_base, l.contactoid, l.gds, c.accountid, a.account_type
 	where b.boletosid=_boletoid LIMIT 1;
 /*CALCULAMOS COMISION A PAGAR AL SATELITE*/
 SELECT tiposdecomisionesid INTO _tipodecomisionid FROM vtiger_tiposdecomisiones
-	WHERE gds = _sistemagds AND tipousuario = _account_type AND tipodevuelo = _tipodevuelo AND tipotransaccion='Abono' LIMIT 1;
+	WHERE activo=1 AND gds = _sistemagds AND tipousuario = _account_type AND tipodevuelo = _tipodevuelo AND tipotransaccion='Abono' LIMIT 1;
 SELECT tipodeformula, base INTO _tipodeformula, _base FROM vtiger_comisionsatelites
 	WHERE tipodecomisionid = _tipodecomisionid AND accountid = _accountid LIMIT 1;
 SET @tipodeformula=_tipodeformula;
@@ -36,7 +36,7 @@ SET @montobase=_montobase;
 IF (_status="Emitido") THEN
 	/*CALCULAMOS FEE DE EMISION A COBRAR AL SATELITE*/
 	SELECT tiposdecomisionesid INTO _tipodecomisionid FROM vtiger_tiposdecomisiones
-		WHERE gds = _sistemagds AND tipousuario = _account_type AND tipodevuelo = _tipodevuelo AND tipotransaccion='Cargo' LIMIT 1;
+		WHERE activo=1 AND gds = _sistemagds AND tipousuario = _account_type AND tipodevuelo = _tipodevuelo AND tipotransaccion='Cargo' LIMIT 1;
 	SELECT tipodeformula, base INTO _tipodeformula, _base FROM vtiger_comisionsatelites
 		WHERE tipodecomisionid = _tipodecomisionid AND accountid = _accountid LIMIT 1;
 	SET @tipodeformula_fee=_tipodeformula;
@@ -44,6 +44,7 @@ IF (_status="Emitido") THEN
 	SET @montobase_fee=_montobase;
 END IF;
 
-/*EN CASO DE REEMITIDOS Y ANULACIONES EL FEE A COBRAR (CARGO) SE TOMA DEL MODULO TARIFAS Y SE ALMACENA EN EL CAMPO FEE AGENCIA (FEE SATELITE QUEDA OBSOLETO)*/
+/*EN CASO DE REEMITIDOS Y ANULACIONES EL FEE A COBRAR (CARGO) SE TOMA DEL MODULO TARIFAS Y SE ALMACENA EN EL CAMPO FEE AGENCIA 
+(FEE SATELITE QUEDA OBSOLETO, TIPOS DE COMISIONES FEE_REE_INT_SAT, FEE_REE_NAC_SAT, FEE_ANU_SAT STATUS ACTIVO NO)*/
 END |
 DELIMITER ;
