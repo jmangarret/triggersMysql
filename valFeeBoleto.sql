@@ -1,12 +1,13 @@
 DROP PROCEDURE IF EXISTS valFeeBoleto;
 DELIMITER |
 CREATE DEFINER=`root`@`localhost` PROCEDURE `valFeeBoleto`(
-	IN _loc VARCHAR(50)
+	IN _loc INT(11)
 	)
 BEGIN 
 	DECLARE _gds VARCHAR(100);
 	DECLARE _valSocio INT(11) DEFAULT 0; 
 	DECLARE _valEmisionWeb INT(11) DEFAULT 0; 
+	DECLARE _valExonerarFee INT(11) DEFAULT 0; 
 	/*Validamos si no es SOTO*/
 	SET @feeBoleto=0;
 	SET _gds=(SELECT gds FROM vtiger_localizadores WHERE localizadoresid=_loc);
@@ -23,7 +24,10 @@ BEGIN
 	/*Validamos la firma de la Pagina Web, para no calcular fee de Agencia */
 	SET _valEmisionWeb=(SELECT localizadoresid FROM vtiger_localizadores WHERE localizadoresid=_loc AND referencia='0001AASU');
 	
-	IF (_valSocio>0 OR _valEmisionWeb>0) THEN
+	/*Validamos esta tiene fee exonerado, para no calcular fee de Agencia */
+	SET _valExonerarFee=(SELECT exonerarfee FROM vtiger_localizadores WHERE localizadoresid=_loc);
+	
+	IF (_valSocio>0 OR _valEmisionWeb>0 OR _valExonerarFee>0) THEN
 		SET @feeBoleto=0;
 	END IF;
 	

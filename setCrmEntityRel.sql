@@ -35,8 +35,14 @@ IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 	SET totProductosBs	=(SELECT IF(ISNULL(SUM(amount)),0,SUM(amount)) AS totProdBs  FROM vtiger_ventadeproductos WHERE currency='VEF' AND registrodeventasid = _crmid);	
 	SET totProductosDol	=(SELECT IF(ISNULL(SUM(amount)),0,SUM(amount)) AS totProdDs  FROM vtiger_ventadeproductos WHERE currency='USD' AND registrodeventasid = _crmid);	
 
+	SET totBoletosBs 	= IF(ISNULL(totBoletosBs),0,totBoletosBs);
+	SET totBoletosDol 	= IF(ISNULL(totBoletosDol),0,totBoletosDol);	
+	SET totProductosBs 	= IF(ISNULL(totProductosBs),0,totProductosBs);
+	SET totProductosDol = IF(ISNULL(totProductosDol),0,totProductosDol);
+
 	SET totBs 	= totBoletosBs+totProductosBs;
 	SET totDol 	= totBoletosDol+totProductosDol;
+	
 	SET totBs 	= IF(ISNULL(totBs),0,totBs);
 	SET totDol 	= IF(ISNULL(totDol),0,totDol);
 
