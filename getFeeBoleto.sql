@@ -10,6 +10,7 @@ BEGIN
 	DECLARE MONTO_FEE DOUBLE(8,2) DEFAULT 0;
 	DECLARE CLIENTE VARCHAR(100);
 	DECLARE AEROLINEA VARCHAR(100);
+	DECLARE FECHAEMISION DATE;
 	SET sql_safe_updates=0;
 	SET CLIENTE=(SELECT acc.account_type
 		FROM vtiger_account AS acc 
@@ -17,6 +18,8 @@ BEGIN
 		INNER JOIN vtiger_localizadores 	AS loc ON loc.contactoid=con.contactid 
 		WHERE loc.localizadoresid=_locid);
 	SET AEROLINEA=(SELECT airline FROM vtiger_localizadores WHERE localizadoresid=_locid);
+	SET FECHAEMISION=(SELECT CAST(fecha_emision AS DATE) FROM vtiger_boletos WHERE localizadorid=_locid LIMIT 1);
+
 	CALL valFeeBoleto(_locid);
 	IF (@feeBoleto>0) THEN	
 		/*FEE DE AGENCIA A COBRAR POR EMISION CLIENTE FINAL*/
@@ -63,7 +66,7 @@ BEGIN
 				END IF;
 				/*AEROLINEA AW-VENEZOLANA AIRLINES*/
 				IF (AEROLINEA LIKE 'AW%') THEN
-					SET MONTO_FEE=2240;
+					SET MONTO_FEE=3740;
 				END IF;
 				/*FIN */
 				IF (CLIENTE ='Satelite') THEN
@@ -74,8 +77,8 @@ BEGIN
 					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_BSP_PGE%');
 				END IF;
 				/*AEROLINEA AW-VENEZOLANA AIRLINES*/
-				IF (AEROLINEA LIKE 'AW%') THEN
-					SET MONTO_FEE=2240;
+				IF (AEROLINEA LIKE 'AW%') THEN	
+					SET MONTO_FEE=3740;
 				END IF;
 			ELSE
 				SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_INT_PGE%');
@@ -85,13 +88,18 @@ BEGIN
 				END IF;
 				/*AEROLINEA AW-VENEZOLANA AIRLINES*/
 				IF (AEROLINEA LIKE 'AW%') THEN
-					SET MONTO_FEE=2240;
+					SET MONTO_FEE=3740;
 				END IF;
 				/*FIN */
 				IF (CLIENTE ='Satelite') THEN
 					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_SAT%');
 				END IF;
 			END IF;
+			/*ANULACIONES SATELITES DESPUES DEL 1ER DIA DE LA EMISION - AEROLINEAS: S3 SANTAB, EQ TAME, R7 ASERCA, 9V AVIOR*/
+			IF (CLIENTE ='Satelite' AND CURRENT_DATE()>FECHAEMISION AND (AEROLINEA LIKE '9V%' OR AEROLINEA LIKE 'R7%' OR AEROLINEA LIKE 'S3%' OR AEROLINEA LIKE 'EQ%')) THEN
+				SET MONTO_FEE=11500;
+			END IF;
+			/*FIN */
 		END IF;
 	END IF;
 
