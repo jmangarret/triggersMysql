@@ -16,7 +16,7 @@ set @salida = 0;
 	IF (paymentmethod="CC") 	THEN	SET paymentmethod="Credito"; 			END IF;
 	IF (paymentmethod="AX") 	THEN	SET paymentmethod="American Express"; 	END IF;
 
-	SET aerolinea=(SELECT airline FROM vtiger_airline WHERE airlineid LIKE CONCAT('%',aerolinea,'%') OR airline LIKE CONCAT('%',aerolinea,'%'));
+	SET aerolinea=(SELECT airline FROM vtiger_airline WHERE airlineid LIKE CONCAT(aerolinea,'%') OR airline LIKE CONCAT(aerolinea,'%'));
 	
 	INSERT INTO vtiger_localizadores (localizadoresid,localizador,contactoid,gds,paymentmethod,airline,status,referencia) 
 	VALUES (localizadoresid,localizador,contacto_id,sistemagds,paymentmethod,aerolinea,status,ref);

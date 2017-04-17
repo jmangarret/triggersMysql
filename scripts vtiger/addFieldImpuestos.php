@@ -15,7 +15,7 @@ $field0->name = 'yn_tax'; //Usually matches column name
 $field0->table = 'vtiger_boletos';
 $field0->column = 'yn_tax'; //Must be lower case
 $field0->label = 'Impuesto YN'; //Upper case preceeded by LBL_
-$field0->columntype = 'DOUBLE(8,2)'; //
+$field0->columntype = 'DOUBLE(25,2)'; //
 $field0->uitype = 7; //Campo select Cuenta
 $field0->typeofdata = 'N~O'; //V=Varchar?, M=Mandatory, O=Optional
 $block->addField($field0);
@@ -26,7 +26,7 @@ $field01->label='Impuesto total';
 $field01->name='total_tax';
 $field01->table='vtiger_boletos';
 $field01->column='total_tax';
-$field01->columntype = 'DOUBLE(8,2)';
+$field01->columntype = 'DOUBLE(25,2)';
 $field01->uitype = 7; //PICKLIST
 $field01->typeofdata = 'N~O';
 $block->addField($field01);

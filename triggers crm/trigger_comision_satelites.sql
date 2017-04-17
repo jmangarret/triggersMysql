@@ -8,7 +8,7 @@ BEGIN
 	DECLARE _accountid INT;
 	DECLARE _idsatelite INT;
 	DECLARE _tipodeformula VARCHAR(50);
-	DECLARE _base DOUBLE(8,2);
+	DECLARE _base DOUBLE(25,2);
 	DECLARE _aplicartodo INT;
 	DECLARE _iduser INT;
 	DECLARE _fecha DATETIME;
@@ -26,7 +26,7 @@ BEGIN
 		IF @end_row THEN
 			LEAVE loop1;
 		END IF;
-		IF (_type="Satelite" OR _type="Freelance") THEN			
+		IF (_type="Satelite" OR _type="Freelance" OR _type="Freelance Plus") THEN			
 			SELECT COUNT(*) INTO _existe FROM vtiger_comisionsatelites WHERE accountid=_idsatelite AND tipodecomisionid=_tipodecomisionid;
 			IF (_existe>0) THEN
 				UPDATE vtiger_comisionsatelites SET tipodeformula=_tipodeformula,  base=_base WHERE accountid=_idsatelite AND tipodecomisionid=_tipodecomisionid;

@@ -89,8 +89,8 @@ include_once ('vtlib/Vtiger/Module.php');
         $fieldInstance4->table = $TABLENAME;
         $fieldInstance4->uitype = 7;
         $fieldInstance4->column = 'valor_base';
-        $fieldInstance4->columntype = 'DOUBLE(8,2)';
-        $fieldInstance4->typeofdata = 'N~M~8,2';
+        $fieldInstance4->columntype = 'DOUBLE(25,2)';
+        $fieldInstance4->typeofdata = 'N~M~25,2';
         $blockInstance->addField($fieldInstance4);
 
 

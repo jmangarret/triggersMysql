@@ -7,7 +7,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getFeeBoleto`(
 	IN _itinerario VARCHAR(250)
 	)
 BEGIN 
-	DECLARE MONTO_FEE DOUBLE(8,2) DEFAULT 0;
+	DECLARE MONTO_FEE DOUBLE(25,2) DEFAULT 0;
 	DECLARE CLIENTE VARCHAR(100);
 	DECLARE AEROLINEA VARCHAR(100);
 	DECLARE FECHAEMISION DATE;
@@ -42,11 +42,17 @@ BEGIN
 				IF (CLIENTE ='Satelite') THEN
 					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%REE_NAC_SAT%');
 				END IF;
+				IF (CLIENTE ='Freelance Plus') THEN
+					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%REE_NAC_PLUS%');
+				END IF;
 			ELSE
 				SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%REE_INT_PGE%');
 				IF (CLIENTE = 'Satelite') THEN
 					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%REE_INT_SAT%');
 				END IF;				
+				IF (CLIENTE ='Freelance Plus') THEN
+					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%REE_INT_PLUS%');
+				END IF;
 			END IF;
 		END IF;
 		/*FEE DE AGENCIA A COBRAR POR RE-EMBOLSOS*/ 
@@ -72,6 +78,9 @@ BEGIN
 				IF (CLIENTE ='Satelite') THEN
 					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_SAT%');
 				END IF;
+				IF (CLIENTE ='Freelance Plus') THEN
+					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_FREE_PLUS%');
+				END IF;
 				/*AEROLINEAS DEL BSP 9V-AVIOR R7-ASERCA S3-SANTABARBARA QL-LASER AG-ARUBA AIRLINES*/
 				IF (AEROLINEA LIKE '9V%' OR AEROLINEA LIKE 'R7%' OR AEROLINEA LIKE 'S3%' OR AEROLINEA LIKE 'QL%' OR AEROLINEA LIKE 'AG%') THEN
 					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_BSP_PGE%');
@@ -93,6 +102,9 @@ BEGIN
 				/*FIN */
 				IF (CLIENTE ='Satelite') THEN
 					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_SAT%');
+				END IF;
+				IF (CLIENTE ='Freelance Plus') THEN
+					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_FREE_PLUS%');
 				END IF;
 			END IF;
 			/*ANULACIONES SATELITES DESPUES DEL 1ER DIA DE LA EMISION - AEROLINEAS: S3 SANTAB, EQ TAME, R7 ASERCA, 9V AVIOR*/

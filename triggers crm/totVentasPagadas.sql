@@ -53,6 +53,11 @@ END IF;
 SET _totCambioBs = _totVentaDol * _cambio;
 
 SET _totPendBs = _totVentaBs + _totCambioBs - (_totPagosBs + _totPagosDol * _cambio);
+
+IF (_totPendBs<0 && _totVentaDol>0) THEN
+	SET _totPendDol = _totVentaDol - _totPagosDol - (_totPagosBs/_cambio);
+END IF;
+
 /*
 IF (_totPagosBs>_totVentaBs AND _totPendDol>=0 AND (_totVentaBs>0 OR _totVentaDol>0)) THEN
 	/*SET _totDolEnBs = (_totPagosBs - _totVentaBs) / _cambio;
