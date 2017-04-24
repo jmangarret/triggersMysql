@@ -14,6 +14,9 @@ IF (iduser IS NULL) THEN
 	SET iduser=1;
 END IF;
 */
+/*Restamos diferencia horaria de servidores amadeus EEUU*/
+SET creado=(SELECT creado - INTERVAL 4 HOUR);
+
 SET TotReg=(SELECT COUNT(*) FROM vtiger_crmentity WHERE crmid=idcrm AND setype=modulo);
 IF (TotReg>0) THEN
 	UPDATE vtiger_crmentity SET smcreatorid=iduser, smownerid=iduser, label=label WHERE crmid=idcrm and setype=modulo;	
