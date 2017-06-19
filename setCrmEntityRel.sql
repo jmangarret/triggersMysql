@@ -53,6 +53,8 @@ IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 			totalpendientedolares	=totDol 
 	WHERE 	registrodeventasid		= _crmid;
 
+	UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
+
 	IF ROW_COUNT()>0 THEN		
 		UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
 		IF ROW_COUNT()>0 THEN	

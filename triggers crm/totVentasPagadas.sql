@@ -46,8 +46,6 @@ SET _totPagosBs	=(SELECT IF(ISNULL(SUM(amount)),0,SUM(amount)) AS PagoBs FROM vt
 SET _totPendBs = _totVentaBs - _totPagosBs;
 IF (_totPagosDol>0) THEN
 	SET _totPendDol = _totVentaDol - _totPagosDol;
-ELSE
-	SET _totPendDol	= 0;
 END IF;
 
 SET _totCambioBs = _totVentaDol * _cambio;
@@ -58,6 +56,9 @@ IF (_totPendBs<0 && _totVentaDol>0) THEN
 	SET _totPendDol = _totVentaDol - _totPagosDol - (_totPagosBs/_cambio);
 END IF;
 
+IF (_totPagosDol<=0 OR _totPendBs=0) THEN
+	SET _totPendDol	= 0;
+END IF;
 /*
 IF (_totPagosBs>_totVentaBs AND _totPendDol>=0 AND (_totVentaBs>0 OR _totVentaDol>0)) THEN
 	/*SET _totDolEnBs = (_totPagosBs - _totVentaBs) / _cambio;
