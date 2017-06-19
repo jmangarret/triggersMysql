@@ -1,0 +1,22 @@
+
+pruebas curl por consola en DEV
+
+curl -i -d "user=HUMBERMAR&password=iphieg7Aheihip6J&request=null" https://ssl00.kiusys.com/ws3/
+curl -i -d "user=HUMBERMAR&password=iphieg7Aheihip6J&request=null" ssl00.kiusys.com/ws3/
+curl -u HUMBERMAR:iphieg7Aheihip6J https://ssl00.kiusys.com/ws3/
+
+instal curl en DEV
+
+Agregar repositorios
+	#deb http://http.debian.net/debian/ squeeze-lts main contrib non-free
+	#deb-src http://http.debian.net/debian/ squeeze-lts main contrib non-free
+	deb http://archive.debian.org/debian squeeze main
+	deb http://archive.debian.org/debian squeeze-lts main
+
+en /etc/apt/sources.list
+
+Agregar linea 
+	Acquire::Check-Valid-Until false;
+
+en /etc/apt/apt.conf.d/70debconf
+
