@@ -3,8 +3,8 @@ DELIMITER |
 CREATE DEFINER=`root`@`localhost` PROCEDURE `setCrmEntityRel`(
 	IN _modulo VARCHAR(250), 
 	IN _modulorel VARCHAR(250), 
-	IN _crmid VARCHAR(25), 
-	IN _crmidrel VARCHAR(25)	
+	IN _crmid INT, 
+	IN _crmidrel INT	
 	)
 BEGIN 
 DECLARE totBoletosBs DOUBLE(25,2);
@@ -27,7 +27,11 @@ IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 		SET _crmid=(SELECT registrodeventasid FROM vtiger_localizadores WHERE localizadoresid=_crmidrel LIMIT 1);
 	END IF;
 	/*Actualizamos contacto de localizador si no tiene*/
-	CALL setContactoLoc(_crmidrel,_crmid);
+	CALL setContactoLoc(_crmidrel,_crmid);	
+	
+	/*Se desactiva FIX totalizador de boletos para evitar error de suma de valores nulos 22jun2017*/
+	/*ERROR DE REDUNDANCIA CICLICA AL MODIFICAR BOLETO, SE DISPARA TRIGGER Y GENERA LOOP AL VOLVER A LLAMAR ESTE SP*/
+	/*CALL setTotalBoletos("RegistroDeVentas",_crmid);*/	
 	
 	SET totBoletosBs	=(SELECT SUM(totalboletos) FROM vtiger_localizadores AS l INNER JOIN vtiger_boletos AS b ON l.localizadoresid = b.localizadorid WHERE b.currency = "VEF" AND l.registrodeventasid=_crmid AND b.boletosid NOT IN (SELECT crmid FROM vtiger_crmentity WHERE deleted=1));	
 	SET totBoletosDol	=(SELECT SUM(totalboletos) FROM vtiger_localizadores AS l INNER JOIN vtiger_boletos AS b ON l.localizadoresid = b.localizadorid WHERE b.currency = "USD" AND l.registrodeventasid=_crmid AND b.boletosid NOT IN (SELECT crmid FROM vtiger_crmentity WHERE deleted=1));	
@@ -53,11 +57,12 @@ IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 			totalpendientedolares	=totDol 
 	WHERE 	registrodeventasid		= _crmid;
 
-	UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
-
-	IF ROW_COUNT()>0 THEN		
+	SET numRows=ROW_COUNT();
+	
+	IF numRows>0 THEN		
 		UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
-		IF ROW_COUNT()>0 THEN	
+		SET numRows=ROW_COUNT();
+		IF numRows>0 THEN	
 			/*VERIFICAMOS SI ES GDS SERVI PARA ACTUALIZAR STATUS DE VENTA SOTO*/
 			SET numRows=(SELECT COUNT(*) FROM vtiger_localizadores WHERE localizadoresid=_crmidrel AND gds='Servi');
 			IF (numRows>0) THEN
