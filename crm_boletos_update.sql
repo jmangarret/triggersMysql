@@ -2,6 +2,7 @@ DROP TRIGGER IF EXISTS crm_boletos_update;
 DELIMITER |
 CREATE TRIGGER crm_boletos_update BEFORE UPDATE ON vtiger_boletos
 FOR EACH ROW BEGIN	
+	DECLARE AEROLINEA VARCHAR(100);
 	SET @MONTO_FEE=0;
 	CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario);
 	SET NEW.fee = @MONTO_FEE;	
@@ -13,6 +14,10 @@ FOR EACH ROW BEGIN
 	END IF;
 	IF NEW.status='Anulado' THEN
 		SET NEW.amount=0;
+	END IF;	
+	SET AEROLINEA=(SELECT airline FROM vtiger_localizadores WHERE localizadoresid=NEW.localizadorid);
+	IF NEW.status='Anulado' AND AEROLINEA LIKE 'AW%' THEN
+		SET NEW.amount=2500;
 	END IF;
 	SET NEW.extra_fee=IF(ISNULL(NEW.extra_fee),0,NEW.extra_fee);
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;
@@ -23,6 +28,7 @@ DROP TRIGGER IF EXISTS crm_boletos_insert_before;
 DELIMITER |
 CREATE TRIGGER crm_boletos_insert_before BEFORE INSERT ON vtiger_boletos
 FOR EACH ROW BEGIN  
+	DECLARE AEROLINEA VARCHAR(100);
 	SET @MONTO_FEE=0;
 	CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario);
 	SET NEW.fee = @MONTO_FEE;	
@@ -35,6 +41,10 @@ FOR EACH ROW BEGIN
 	IF NEW.status='Anulado' THEN
 		SET NEW.amount=0;
 	END IF;
+	SET AEROLINEA=(SELECT airline FROM vtiger_localizadores WHERE localizadoresid=NEW.localizadorid);
+	IF NEW.status='Anulado' AND AEROLINEA LIKE 'AW%' THEN
+		SET NEW.amount=2500;
+	END IF;	
 	SET NEW.extra_fee=IF(ISNULL(NEW.extra_fee),0,NEW.extra_fee);
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;	
 END |
