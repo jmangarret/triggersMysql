@@ -53,11 +53,12 @@ IF (_modulo="RegistroDeVentas" AND _modulorel="Localizadores") THEN
 			totalpendientedolares	=totDol 
 	WHERE 	registrodeventasid		= _crmid;
 
-	UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
+	SET numRows=ROW_COUNT();	
 
-	IF ROW_COUNT()>0 THEN		
+	IF (numRows>0) THEN		
 		UPDATE vtiger_localizadores SET registrodeventasid=_crmid, procesado=1 WHERE localizadoresid=_crmidrel;
-		IF ROW_COUNT()>0 THEN	
+		SET numRows=ROW_COUNT();
+		IF numRows>0 THEN	
 			/*VERIFICAMOS SI ES GDS SERVI PARA ACTUALIZAR STATUS DE VENTA SOTO*/
 			SET numRows=(SELECT COUNT(*) FROM vtiger_localizadores WHERE localizadoresid=_crmidrel AND gds='Servi');
 			IF (numRows>0) THEN
