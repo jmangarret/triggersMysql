@@ -1,0 +1,5 @@
+http://dev.tuagencia24.com/GDS-PROD/webservices/View/Itinerary/
+
+http://dev.tuagencia24.com/GDS-PROD/webservices/View/Itinerary/
+
+http://dev.tuagencia24.com/GDS-DEV/webservices/View/Sales/
