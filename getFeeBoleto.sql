@@ -112,44 +112,77 @@ BEGIN
 				END IF;
 				/*AEROLINEA AW-VENEZOLANA AIRLINES*/
 				IF (AEROLINEA LIKE 'AW%') THEN
-					SET MONTO_FEE=3740;
+					/*SET MONTO_FEE=3740;*/
+					SET MONTO_FEE=(SELECT valor FROM vtiger_tarifas_historico AS H 
+									INNER JOIN vtiger_tarifas AS T ON H.tarifasid=T.tarifasid  
+									 WHERE codigo LIKE '%ANU_AER_VEN%' AND H.fecha<= FECHAEMISION ORDER BY fecha DESC LIMIT 1);																				
 				END IF;
 				/*FIN */
 				IF (CLIENTE ='Satelite') THEN
-					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_SAT%');
+					/*SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_SAT%');*/
+					SET MONTO_FEE=(SELECT valor FROM vtiger_tarifas_historico AS H 
+									INNER JOIN vtiger_tarifas AS T ON H.tarifasid=T.tarifasid  
+									 WHERE codigo LIKE '%ANU_SAT%' AND H.fecha<= FECHAEMISION ORDER BY fecha DESC LIMIT 1);										
 				END IF;
 				IF (CLIENTE ='Freelance Plus') THEN
-					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_FREE_PLUS%');
+					/*SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_FREE_PLUS%');*/
+					SET MONTO_FEE=(SELECT valor FROM vtiger_tarifas_historico AS H 
+									INNER JOIN vtiger_tarifas AS T ON H.tarifasid=T.tarifasid  
+									 WHERE codigo LIKE '%ANU_FREE_PLUS%' AND H.fecha<= FECHAEMISION ORDER BY fecha DESC LIMIT 1);										
 				END IF;
 				/*AEROLINEAS DEL BSP 9V-AVIOR R7-ASERCA S3-SANTABARBARA QL-LASER AG-ARUBA AIRLINES*/
 				IF (AEROLINEA LIKE '9V%' OR AEROLINEA LIKE 'R7%' OR AEROLINEA LIKE 'S3%' OR AEROLINEA LIKE 'QL%' OR AEROLINEA LIKE 'AG%') THEN
-					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_BSP_PGE%');
+					/*SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_BSP_PGE%');*/
+					SET MONTO_FEE=(SELECT valor FROM vtiger_tarifas_historico AS H 
+									INNER JOIN vtiger_tarifas AS T ON H.tarifasid=T.tarifasid  
+									 WHERE codigo LIKE '%ANU_BSP_PGE%' AND H.fecha<= FECHAEMISION ORDER BY fecha DESC LIMIT 1);										
 				END IF;
 				/*AEROLINEA AW-VENEZOLANA AIRLINES*/
 				IF (AEROLINEA LIKE 'AW%') THEN	
-					SET MONTO_FEE=3740;
+					/*SET MONTO_FEE=3740;*/
+					SET MONTO_FEE=(SELECT valor FROM vtiger_tarifas_historico AS H 
+									INNER JOIN vtiger_tarifas AS T ON H.tarifasid=T.tarifasid  
+									 WHERE codigo LIKE '%ANU_AER_VEN%' AND H.fecha<= FECHAEMISION ORDER BY fecha DESC LIMIT 1);																				
 				END IF;
 			ELSE
-				SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_INT_PGE%');
+				/*SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_INT_PGE%');*/
+				SET MONTO_FEE=(SELECT valor FROM vtiger_tarifas_historico AS H 
+								INNER JOIN vtiger_tarifas AS T ON H.tarifasid=T.tarifasid  
+								WHERE codigo LIKE '%ANU_INT_PGE%' AND H.fecha<= FECHAEMISION ORDER BY fecha DESC LIMIT 1);									
 				/*AEROLINEAS DEL BSP 9V-AVIOR R7-ASERCA S3-SANTABARBARA QL-LASER AG-ARUBA AIRLINES*/
 				IF (AEROLINEA LIKE '9V%' OR AEROLINEA LIKE 'R7%' OR AEROLINEA LIKE 'S3%' OR AEROLINEA LIKE 'QL%' OR AEROLINEA LIKE 'AG%') THEN
-					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_BSP_PGE%');
+					/*SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_BSP_PGE%');*/
+					SET MONTO_FEE=(SELECT valor FROM vtiger_tarifas_historico AS H 
+									INNER JOIN vtiger_tarifas AS T ON H.tarifasid=T.tarifasid  
+									 WHERE codigo LIKE '%ANU_BSP_PGE%' AND H.fecha<= FECHAEMISION ORDER BY fecha DESC LIMIT 1);										
 				END IF;
 				/*AEROLINEA AW-VENEZOLANA AIRLINES*/
 				IF (AEROLINEA LIKE 'AW%') THEN
-					SET MONTO_FEE=3740;
+					/*SET MONTO_FEE=3740;*/
+					SET MONTO_FEE=(SELECT valor FROM vtiger_tarifas_historico AS H 
+									INNER JOIN vtiger_tarifas AS T ON H.tarifasid=T.tarifasid  
+									 WHERE codigo LIKE '%ANU_AER_VEN%' AND H.fecha<= FECHAEMISION ORDER BY fecha DESC LIMIT 1);															
 				END IF;
 				/*FIN */
 				IF (CLIENTE ='Satelite') THEN
-					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_SAT%');
+					/*SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_SAT%');*/
+					SET MONTO_FEE=(SELECT valor FROM vtiger_tarifas_historico AS H 
+									INNER JOIN vtiger_tarifas AS T ON H.tarifasid=T.tarifasid  
+									 WHERE codigo LIKE '%ANU_SAT%' AND H.fecha<= FECHAEMISION ORDER BY fecha DESC LIMIT 1);										
 				END IF;
 				IF (CLIENTE ='Freelance Plus') THEN
-					SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_FREE_PLUS%');
+					/*SET MONTO_FEE=(SELECT valor_base FROM vtiger_tarifas WHERE codigo LIKE '%ANU_FREE_PLUS%');*/
+					SET MONTO_FEE=(SELECT valor FROM vtiger_tarifas_historico AS H 
+									INNER JOIN vtiger_tarifas AS T ON H.tarifasid=T.tarifasid  
+									 WHERE codigo LIKE '%ANU_FREE_PLUS%' AND H.fecha<= FECHAEMISION ORDER BY fecha DESC LIMIT 1);										
 				END IF;
 			END IF;
 			/*ANULACIONES SATELITES DESPUES DEL 1ER DIA DE LA EMISION - AEROLINEAS: S3 SANTAB, EQ TAME, R7 ASERCA, 9V AVIOR*/
 			IF (CLIENTE ='Satelite' AND CURRENT_DATE()>FECHAEMISION AND (AEROLINEA LIKE '9V%' OR AEROLINEA LIKE 'R7%' OR AEROLINEA LIKE 'S3%' OR AEROLINEA LIKE 'EQ%')) THEN
-				SET MONTO_FEE=11500;
+				/*SET MONTO_FEE=11500;*/
+				SET MONTO_FEE=(SELECT valor FROM vtiger_tarifas_historico AS H 
+								INNER JOIN vtiger_tarifas AS T ON H.tarifasid=T.tarifasid  
+								 WHERE codigo LIKE '%ANU_SAT_DES%' AND H.fecha<= FECHAEMISION ORDER BY fecha DESC LIMIT 1);														
 			END IF;
 			/*FIN */
 		END IF;

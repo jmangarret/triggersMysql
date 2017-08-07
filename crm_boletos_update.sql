@@ -5,7 +5,9 @@ FOR EACH ROW BEGIN
 	DECLARE AEROLINEA VARCHAR(100);
 	SET @MONTO_FEE=0;
 	CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario);
-	SET NEW.fee = @MONTO_FEE;	
+	IF @MONTO_FEE>0 THEN
+		SET NEW.fee = @MONTO_FEE;	
+	END IF;
 	/*CALCULAMOS FEE Y COMISION DE SATELITE*/
 	CALL setComission(NEW.boletosid,NEW.tipodevuelo,NEW.status,1);
 	SET NEW.comision_sat = @comision_sat;
@@ -31,7 +33,9 @@ FOR EACH ROW BEGIN
 	DECLARE AEROLINEA VARCHAR(100);
 	SET @MONTO_FEE=0;
 	CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario);
-	SET NEW.fee = @MONTO_FEE;	
+	IF @MONTO_FEE>0 THEN
+		SET NEW.fee = @MONTO_FEE;	
+	END IF;	
 	/*CALCULAMOS FEE Y COMISION DE SATELITE*/
 	CALL setComission(NEW.boletosid,NEW.tipodevuelo,NEW.status,1);
 	SET NEW.comision_sat = @comision_sat;
