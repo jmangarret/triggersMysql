@@ -1,5 +1,5 @@
 
-INSERT INTO `vtiger_tarifas_historico` VALUES 
+INSERT INTO vtiger_tarifas_historico(tarifasid, fecha, valor) VALUES 
 (16098,'2017-07-03',11000.00),
 (16100,'2017-07-03',5500.00),
 (16105,'2017-07-03',30000.00),

@@ -4,7 +4,7 @@ CREATE TRIGGER crm_boletos_update BEFORE UPDATE ON vtiger_boletos
 FOR EACH ROW BEGIN	
 	DECLARE AEROLINEA VARCHAR(100);
 	SET @MONTO_FEE=0;
-	CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario);
+	CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario, NEW.fecha_emision);
 	IF @MONTO_FEE>0 THEN
 		SET NEW.fee = @MONTO_FEE;	
 	END IF;
@@ -32,7 +32,7 @@ CREATE TRIGGER crm_boletos_insert_before BEFORE INSERT ON vtiger_boletos
 FOR EACH ROW BEGIN  
 	DECLARE AEROLINEA VARCHAR(100);
 	SET @MONTO_FEE=0;
-	CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario);
+	CALL getFeeBoleto(NEW.localizadorid,NEW.status,NEW.tipodevuelo,NEW.itinerario, NEW.fecha_emision);
 	IF @MONTO_FEE>0 THEN
 		SET NEW.fee = @MONTO_FEE;	
 	END IF;	

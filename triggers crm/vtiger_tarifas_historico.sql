@@ -20,8 +20,10 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `vtiger_tarifas_historico`;
 CREATE TABLE `vtiger_tarifas_historico` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `tarifasid` int(11) NOT NULL,
   `fecha` date default NULL,
-  `valor` double(8,2) default NULL
+  `valor` double(8,2) default NULL,
+  PRIMARY KEY ( `id` ) 
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 SET FOREIGN_KEY_CHECKS=1;
