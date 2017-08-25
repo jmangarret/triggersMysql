@@ -19,7 +19,7 @@ BEGIN
 		INNER JOIN vtiger_localizadores 	AS loc ON loc.contactoid=con.contactid 
 		WHERE loc.localizadoresid=_locid);
 	SET AEROLINEA=(SELECT airline FROM vtiger_localizadores WHERE localizadoresid=_locid);	
-	/*SE COMENTA LINEA PARA OBTENER FECHA DE EMISION POR PARAMETRO DESDE TRIGGER BEFORE*/
+	/*SE COMENTA SET FECHA_EMISION, PARA OBTENER FECHA DE EMISION POR PARAMETRO DESDE TRIGGER BEFORE - NUEVA VARIABLE _fechaemision*/
 	/*SET FECHAEMISION=(SELECT CAST(fecha_emision AS DATE) FROM vtiger_boletos WHERE localizadorid=_locid LIMIT 1);*/
 	CALL valFeeBoleto(_locid);
 	IF (@feeBoleto>0) THEN	

@@ -21,6 +21,7 @@ FOR EACH ROW BEGIN
 	IF NEW.status='Anulado' AND AEROLINEA LIKE 'AW%' THEN
 		SET NEW.amount=2500;
 	END IF;
+	SET NEW.fee=IF(ISNULL(NEW.fee),0,NEW.fee);
 	SET NEW.extra_fee=IF(ISNULL(NEW.extra_fee),0,NEW.extra_fee);
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;
 END|
@@ -49,6 +50,7 @@ FOR EACH ROW BEGIN
 	IF NEW.status='Anulado' AND AEROLINEA LIKE 'AW%' THEN
 		SET NEW.amount=2500;
 	END IF;	
+	SET NEW.fee=IF(ISNULL(NEW.fee),0,NEW.fee);
 	SET NEW.extra_fee=IF(ISNULL(NEW.extra_fee),0,NEW.extra_fee);
 	SET NEW.totalboletos=NEW.fee + NEW.extra_fee + NEW.amount;	
 END |
