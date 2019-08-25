@@ -26,16 +26,18 @@ DECLARE loc VARCHAR(255);
 DECLARE bandera INT;
 DECLARE find_YN_tax decimal(15,2);
 DECLARE find_total_tax decimal(15,2);
+DECLARE find_departure_date DATETIME;
+DECLARE find_arrival_date DATETIME;
 
 SET sql_safe_updates=0;
 SET max_sp_recursion_depth = 255; 
 
 SELECT localizador, currency, fee, total_amount, montobase, passenger, 
 sistemagds, emittedDate, creationDate, ticketNumber, status_emission, ID_asesora, 
-ID_satelite, tipo_vuelo, method_payment, itinerary, airlineID, YN_tax, total_tax, coupon_status
+ID_satelite, tipo_vuelo, method_payment, itinerary, airlineID, YN_tax, total_tax, coupon_status, departureDate, arrivalDate
 	INTO find_localizador, find_currency, find_fee, find_total_amount, find_montobase, find_passenger, 
 	find_sistemagds, find_emittedDate, find_creationDate, find_ticketNumber, find_status, find_id_asesora, 
-	find_id_satelite, find_tipo_vuelo, find_paymentmethod, find_itinerario, find_aerolinea, find_YN_tax, find_total_tax, find_status_anu
+	find_id_satelite, find_tipo_vuelo, find_paymentmethod, find_itinerario, find_aerolinea, find_YN_tax, find_total_tax, find_status_anu, find_departure_date, find_arrival_date
 FROM registro_boletos.boletos WHERE id=id_ticket;
 SET @_localizador = find_localizador;
 /*SET @_creationDate = find_creationDate; Se cambia fecha de creacion para asumir la de emision */
@@ -60,7 +62,7 @@ IF id_localizador>0 THEN
 	SET bandera = 1;
 	
 	CALL setVtigerBoletos(@idcrm, find_ticketNumber, find_localizador, find_currency, find_fee,
-	find_total_amount, find_montobase, id_localizador, find_emittedDate, find_passenger, find_itinerario, find_status, find_tipo_vuelo, find_YN_tax, find_total_tax, bandera);
+	find_total_amount, find_montobase, id_localizador, find_emittedDate, find_passenger, find_itinerario, find_status, find_tipo_vuelo, find_YN_tax, find_total_tax, bandera, find_departure_date, find_arrival_date);
 	
 ELSE	
 	SELECT usercontactoid INTO contacto_id FROM vtiger_terminales AS t INNER JOIN vtiger_contactdetails AS d ON t.usercontactoid=d.contactid WHERE firma LIKE CONCAT('%',find_id_satelite,'%') LIMIT 1;
@@ -75,7 +77,7 @@ ELSE
 		CALL getCrmId();
 		
 		CALL setVtigerBoletos(@idcrm, find_ticketNumber, find_localizador, find_currency, find_fee,
-		find_total_amount, find_montobase, id_localizador, find_emittedDate, find_passenger, find_itinerario, find_status, find_tipo_vuelo, find_YN_tax, find_total_tax, bandera);
+		find_total_amount, find_montobase, id_localizador, find_emittedDate, find_passenger, find_itinerario, find_status, find_tipo_vuelo, find_YN_tax, find_total_tax, bandera, find_departure_date, find_arrival_date);
 		
 	END IF;
 END IF;
